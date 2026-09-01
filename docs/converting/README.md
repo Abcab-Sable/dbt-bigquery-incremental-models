@@ -1,10 +1,13 @@
 # The conversion track
 
-**Status: waves 1–3 complete — 63 of 138 units written.**
+**Status: waves 1–4 complete — 96 of 138 units written.**
 
-Five of the eleven parts are finished, covering the full path from *what have I
-got* through to *the old script is retired*: assessment, write-pattern
-archetypes, statement-level translation, hooks, and verification.
+Seven of the eleven parts are finished. Everything about *translating a script*
+is now written: what you have, what shape it is, how each construct maps, hooks
+in full, and how to prove the result.
+
+Remaining is wave 5 — scheduling and backfills, migration strategy, operating it
+afterwards, and anti-patterns.
 
 ## Written so far
 
@@ -34,6 +37,11 @@ archetypes, statement-level translation, hooks, and verification.
 | [E6](E-translation/E6-hardcoded-dates.md) | Hardcoded dates and backfill parameters |
 | [E7](E-translation/E7-idempotency-meaning.md) | Idempotency: what it means |
 | [E8](E-translation/E8-idempotency-proving.md) | Idempotency: proving it |
+| [E9](E-translation/E9-session-settings.md) | Session settings |
+| [E10](E-translation/E10-system-variables.md) | System variables |
+| [E11](E-translation/E11-query-parameters.md) | Query parameters → vars |
+| [E12](E-translation/E12-cost-controls.md) | Cost controls |
+| [E13](E-translation/E13-time-travel.md) | Time travel |
 
 ### Write-pattern archetypes — *complete*
 
@@ -55,6 +63,44 @@ archetypes, statement-level translation, hooks, and verification.
 | [B14](B-write-patterns/B14-when-the-range-can-empty.md) | **When the range can legitimately empty** |
 | [B15](B-write-patterns/B15-truncate-insert.md) | `TRUNCATE` + `INSERT` |
 | [B16](B-write-patterns/B16-deduplication.md) | Deduplication scripts |
+
+### Structural archetypes — *complete*
+
+| | |
+| --- | --- |
+| [C1](C-structural/C1-multi-statement-to-ctes.md) | Multi-statement → CTEs |
+| [C2](C-structural/C2-ephemeral-models.md) | Multi-statement → ephemeral models |
+| [C3](C-structural/C3-separate-models.md) | Multi-statement → separate models |
+| [C4](C-structural/C4-fan-out.md) | Scripts writing to several tables |
+| [C5](C-structural/C5-declare-set-variables.md) | `DECLARE` / `SET` variables |
+| [C6](C-structural/C6-if-branching.md) | `IF` / `ELSEIF` branching |
+| [C7](C-structural/C7-loops.md) | `WHILE` / `LOOP` iteration |
+| [C8](C-structural/C8-exception-handling.md) | `EXCEPTION WHEN ERROR` |
+| [C9](C-structural/C9-transactions.md) | `BEGIN TRANSACTION` / `COMMIT` |
+| [C10](C-structural/C10-dynamic-sql.md) | `EXECUTE IMMEDIATE` and dynamic SQL |
+| [C11](C-structural/C11-temp-functions.md) | `CREATE TEMP FUNCTION` |
+| [C12](C-structural/C12-nested-procedures.md) | Procedures calling procedures |
+| [C13](C-structural/C13-python-scripts.md) | Python scripts |
+| [C14](C-structural/C14-orchestration.md) | Shell, `bq` CLI, Airflow |
+
+### Data movement, DDL, metadata — *complete*
+
+| | |
+| --- | --- |
+| [D1](D-data-movement/D1-load-data.md) | `LOAD DATA` from GCS |
+| [D2](D-data-movement/D2-export-data.md) | `EXPORT DATA` to GCS |
+| [D3](D-data-movement/D3-external-tables.md) | External tables and BigLake |
+| [D4](D-data-movement/D4-wildcard-tables.md) | Wildcard tables and `_TABLE_SUFFIX` |
+| [D5](D-data-movement/D5-sharded-tables.md) | Date-sharded tables → partitioned |
+| [D6](D-data-movement/D6-partitioning-ddl.md) | Partitioning and clustering DDL |
+| [D7](D-data-movement/D7-table-options.md) | Expiration, labels, description |
+| [D8](D-data-movement/D8-add-column-migrations.md) | `ALTER TABLE ADD COLUMN` |
+| [D9](D-data-movement/D9-column-type-changes.md) | Column type changes |
+| [D10](D-data-movement/D10-grants-authorized-views.md) | Grants and authorized views |
+| [D11](D-data-movement/D11-policy-tags-rls.md) | Policy tags and row-level security |
+| [D12](D-data-movement/D12-assert-gates.md) | `ASSERT` gates → dbt tests |
+| [D13](D-data-movement/D13-notifications.md) | Notification side-effects |
+| [D14](D-data-movement/D14-audit-writes.md) | Audit and metadata writes |
 
 ### Hooks — *complete*
 

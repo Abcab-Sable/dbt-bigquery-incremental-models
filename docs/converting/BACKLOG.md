@@ -21,7 +21,7 @@ granularity rule, not an accident.
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
 **Status** — ✅ means written and linked. Everything else is `todo`.
-**63 of 138 done** — waves 1, 2 and 3 complete. Parts A, B, E, F and H are finished.
+**96 of 138 done** — waves 1–4 complete. Parts A, B, C, D, E, F and H are finished.
 
 **Deps** — units that should be written first, because this one links to them.
 
@@ -100,20 +100,20 @@ Scripts whose difficulty is shape, not write pattern.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| C1 | Multi-statement script → CTEs in one model | M | CRAFT | E1 |
-| C2 | Multi-statement script → ephemeral models | M | CORE | C1 |
-| C3 | Multi-statement script → separate materialized models, and when that's right | M | CRAFT | C1 |
-| C4 | One script writing to several tables → fan-out into models | M | CRAFT | C3 |
-| C5 | `DECLARE` / `SET` scalar variables → vars, macros, `_dbt_max_partition` | M | SRC | E9 |
-| C6 | `IF` / `ELSEIF` branching → Jinja conditionals, or a redesign | M | CRAFT | C5 |
-| C7 | `WHILE` / `LOOP` iteration → why it mostly can't map | M | CRAFT | C6 |
-| C8 | `BEGIN ... EXCEPTION WHEN ERROR` → dbt's failure model instead | M | CRAFT | G11 |
-| C9 | `BEGIN TRANSACTION` / `COMMIT` → what BigQuery and dbt actually guarantee | M | SRC | F6 |
-| C10 | `EXECUTE IMMEDIATE` and dynamic SQL → macros, or a deliberate `run-operation` | M | CRAFT | — |
-| C11 | `CREATE TEMP FUNCTION` → macros vs persistent UDFs | M | CRAFT | — |
-| C12 | Stored procedures calling other procedures → the DAG they were imitating | M | CRAFT | E2 |
-| C13 | Python script using the BigQuery client → Python model, seed, or stays external | M | CORE | — |
-| C14 | Shell / `bq` CLI / Airflow orchestration → the `ref()` DAG | M | CRAFT | E2 |
+| **C1** ✅ | [Multi-statement script → CTEs in one model](C-structural/C1-multi-statement-to-ctes.md) | M | CRAFT | E1 |
+| **C2** ✅ | [Multi-statement script → ephemeral models](C-structural/C2-ephemeral-models.md) | M | CORE | C1 |
+| **C3** ✅ | [Multi-statement script → separate materialized models, and when that's right](C-structural/C3-separate-models.md) | M | CRAFT | C1 |
+| **C4** ✅ | [One script writing to several tables → fan-out into models](C-structural/C4-fan-out.md) | M | CRAFT | C3 |
+| **C5** ✅ | [`DECLARE` / `SET` scalar variables → vars, macros, `_dbt_max_partition`](C-structural/C5-declare-set-variables.md) | M | SRC | E9 |
+| **C6** ✅ | [`IF` / `ELSEIF` branching → Jinja conditionals, or a redesign](C-structural/C6-if-branching.md) | M | CRAFT | C5 |
+| **C7** ✅ | [`WHILE` / `LOOP` iteration → why it mostly can't map](C-structural/C7-loops.md) | M | CRAFT | C6 |
+| **C8** ✅ | [`BEGIN ... EXCEPTION WHEN ERROR` → dbt's failure model instead](C-structural/C8-exception-handling.md) | M | CRAFT | G11 |
+| **C9** ✅ | [`BEGIN TRANSACTION` / `COMMIT` → what BigQuery and dbt actually guarantee](C-structural/C9-transactions.md) | M | SRC | F6 |
+| **C10** ✅ | [`EXECUTE IMMEDIATE` and dynamic SQL → macros, or a deliberate `run-operation`](C-structural/C10-dynamic-sql.md) | M | CRAFT | — |
+| **C11** ✅ | [`CREATE TEMP FUNCTION` → macros vs persistent UDFs](C-structural/C11-temp-functions.md) | M | CRAFT | — |
+| **C12** ✅ | [Stored procedures calling other procedures → the DAG they were imitating](C-structural/C12-nested-procedures.md) | M | CRAFT | E2 |
+| **C13** ✅ | [Python script using the BigQuery client → Python model, seed, or stays external](C-structural/C13-python-scripts.md) | M | CORE | — |
+| **C14** ✅ | [Shell / `bq` CLI / Airflow orchestration → the `ref()` DAG](C-structural/C14-orchestration.md) | M | CRAFT | E2 |
 
 C7 needs an honest answer rather than a clever one: most procedural loops are a
 set-based operation in disguise, or genuine orchestration that belongs outside
@@ -127,20 +127,20 @@ Everything a script does that isn't computing rows.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| D1 | `LOAD DATA` from GCS → seeds, external tables, or stays external | M | CORE | — |
-| D2 | `EXPORT DATA` to GCS → post-hook vs external orchestration | M | CRAFT | F10 |
-| D3 | External tables and BigLake → sources, not models | M | CRAFT | E3 |
-| D4 | Wildcard tables and `_TABLE_SUFFIX` | M | CRAFT | D5 |
-| D5 | Date-sharded tables (`events_20260831`) → one partitioned table | M | CRAFT | — |
-| D6 | Partitioning and clustering DDL → `partition_by` / `cluster_by` config | S | SRC | — |
-| D7 | Expiration, labels, description → config vs post-hook | M | CRAFT | F12 |
-| D8 | `ALTER TABLE ADD COLUMN` migrations → `on_schema_change` | M | SRC | — |
-| D9 | Column type changes → `on_schema_change` and its limits | M | SRC | D8 |
-| D10 | Grants and authorized views → the `grants` config | M | SRC | F11 |
-| D11 | Policy tags and row-level security | S | CRAFT | D10 |
-| D12 | `ASSERT` data-quality gates → dbt tests | M | CRAFT | H12 |
-| D13 | Notification side-effects (Pub/Sub, email) → out of dbt, usually | S | CRAFT | F17 |
-| D14 | Audit and metadata table writes | M | CRAFT | F13 |
+| **D1** ✅ | [`LOAD DATA` from GCS → seeds, external tables, or stays external](D-data-movement/D1-load-data.md) | M | CORE | — |
+| **D2** ✅ | [`EXPORT DATA` to GCS → post-hook vs external orchestration](D-data-movement/D2-export-data.md) | M | CRAFT | F10 |
+| **D3** ✅ | [External tables and BigLake → sources, not models](D-data-movement/D3-external-tables.md) | M | CRAFT | E3 |
+| **D4** ✅ | [Wildcard tables and `_TABLE_SUFFIX`](D-data-movement/D4-wildcard-tables.md) | M | CRAFT | D5 |
+| **D5** ✅ | [Date-sharded tables (`events_20260831`) → one partitioned table](D-data-movement/D5-sharded-tables.md) | M | CRAFT | — |
+| **D6** ✅ | [Partitioning and clustering DDL → `partition_by` / `cluster_by` config](D-data-movement/D6-partitioning-ddl.md) | S | SRC | — |
+| **D7** ✅ | [Expiration, labels, description → config vs post-hook](D-data-movement/D7-table-options.md) | M | CRAFT | F12 |
+| **D8** ✅ | [`ALTER TABLE ADD COLUMN` migrations → `on_schema_change`](D-data-movement/D8-add-column-migrations.md) | M | SRC | — |
+| **D9** ✅ | [Column type changes → `on_schema_change` and its limits](D-data-movement/D9-column-type-changes.md) | M | SRC | D8 |
+| **D10** ✅ | [Grants and authorized views → the `grants` config](D-data-movement/D10-grants-authorized-views.md) | M | SRC | F11 |
+| **D11** ✅ | [Policy tags and row-level security](D-data-movement/D11-policy-tags-rls.md) | S | CRAFT | D10 |
+| **D12** ✅ | [`ASSERT` data-quality gates → dbt tests](D-data-movement/D12-assert-gates.md) | M | CRAFT | H12 |
+| **D13** ✅ | [Notification side-effects (Pub/Sub, email) → out of dbt, usually](D-data-movement/D13-notifications.md) | S | CRAFT | F17 |
+| **D14** ✅ | [Audit and metadata table writes](D-data-movement/D14-audit-writes.md) | M | CRAFT | F13 |
 
 D5 is a bigger win than it looks. Sharded-table scripts are extremely common and
 converting them to a partitioned table changes the cost model entirely — worth
@@ -163,11 +163,11 @@ can link instead of repeating.
 | **E6** ✅ | [Hardcoded dates and manual backfill parameters](E-translation/E6-hardcoded-dates.md) | S | CRAFT | G3 |
 | **E7** ✅ | [Idempotency: what it means for a converted model](E-translation/E7-idempotency-meaning.md) | M | CRAFT | — |
 | **E8** ✅ | [Idempotency: proving it](E-translation/E8-idempotency-proving.md) | M | CRAFT | E7, H2 |
-| E9 | Session settings that spanned statements | M | SRC | — |
-| E10 | System variables (`@@dataset_id`, `@@project_id`) | S | CRAFT | E9 |
-| E11 | Query parameters (`@param`) → vars | S | CORE | G3 |
-| E12 | Cost controls (`maximum_bytes_billed`) after conversion | S | CRAFT | J1 |
-| E13 | Time travel and `FOR SYSTEM_TIME AS OF` | S | CRAFT | — |
+| **E9** ✅ | [Session settings that spanned statements](E-translation/E9-session-settings.md) | M | SRC | — |
+| **E10** ✅ | [System variables (`@@dataset_id`, `@@project_id`)](E-translation/E10-system-variables.md) | S | CRAFT | E9 |
+| **E11** ✅ | [Query parameters (`@param`) → vars](E-translation/E11-query-parameters.md) | S | CORE | G3 |
+| **E12** ✅ | [Cost controls (`maximum_bytes_billed`) after conversion](E-translation/E12-cost-controls.md) | S | CRAFT | J1 |
+| **E13** ✅ | [Time travel and `FOR SYSTEM_TIME AS OF`](E-translation/E13-time-travel.md) | S | CRAFT | — |
 
 E1 is the conceptual hinge of the entire track. A script is a sequence of
 statements; a model is one `select`. Nearly every "how do I do X in dbt" question
@@ -365,8 +365,12 @@ Makes the track usable and covers the two highest-risk conversions end to end.
 write-pattern archetypes, statement-level translation, hooks, and verification.
 That is the full path from "what have I got" to "the old script is retired".
 
-Remaining: Parts C and D (structural archetypes, data movement) in wave 4, and
-Parts G, I, J, K (scheduling, migration, operations, anti-patterns) in wave 5.
+**Waves 1–4 are complete.** Seven of the eleven parts are finished. Everything
+about *translating a script* is now written — what you have, what shape it is,
+how each construct maps, hooks, and how to prove the result.
+
+Remaining is wave 5: Parts G, I, J and K — scheduling and backfills, migration
+strategy, operating it afterwards, and anti-patterns.
 
 Rationale: E1 is the constraint everything references. A3 routes readers. B8 and
 B13 are the two conversions people actually arrive with. **B14 carries the
@@ -395,7 +399,9 @@ Parts F and H are now complete.
 
 The long tail of script shapes, plus the statement-level details they need.
 
-Part C (14) · Part D (14) · `E9`–`E13` (5)
+Part C (14) · Part D (14) · `E9`–`E13` (5) — **all written ✅**
+
+Parts C, D and E are now complete.
 
 ### Wave 5 — Operations and migration (42 units)
 
