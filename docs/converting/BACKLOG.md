@@ -21,7 +21,7 @@ granularity rule, not an accident.
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
 **Status** — ✅ means written and linked. Everything else is `todo`.
-**5 of 138 done** (wave 1, units 1–5).
+**10 of 138 done** — [wave 1](#wave-1--foundation-10-units) complete.
 
 **Deps** — units that should be written first, because this one links to them.
 
@@ -51,7 +51,7 @@ converting the right thing without knowing what "correct" meant.
 | A6 | Find compensating hacks — the fixes that encode an upstream bug | M | CRAFT | A5 |
 | **A7** ✅ | [Decide what **not** to convert](A-assess/A7-what-not-to-convert.md) | S | CRAFT | A3 |
 | A8 | Estimate conversion risk per script | S | CRAFT | A3, A5 |
-| A9 | Capture the correctness baseline before touching anything | M | CRAFT | — |
+| **A9** ✅ | [Capture the correctness baseline before touching anything](A-assess/A9-correctness-baseline.md) | M | CRAFT | — |
 
 A3 is the spine of Parts B–D: classification picks the archetype page.
 A6 and A9 are what make Part H possible — without them you cannot later tell a
@@ -79,7 +79,7 @@ before/after, and what breaks in translation.
 | B11 | Hand-written `MERGE`: conditional `WHEN MATCHED AND ...` clauses | M | SRC | B9 |
 | B12 | Hand-written `MERGE`: extra `ON` predicates → `incremental_predicates` | M | SRC | B8 |
 | **B13** ✅ | [`DELETE` + `INSERT` over a date range → `insert_overwrite`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) | M | SRC | — |
-| B14 | `DELETE` + `INSERT` where the range can legitimately empty → **the behaviour change** | M | SRC | B13 |
+| **B14** ✅ | [`DELETE` + `INSERT` where the range can legitimately empty → **the behaviour change**](B-write-patterns/B14-when-the-range-can-empty.md) | M | SRC | B13 |
 | B15 | `TRUNCATE` + `INSERT` → `table`, or `insert_overwrite` when partitioned | S | SRC | B13 |
 | B16 | Deduplication scripts (`QUALIFY ROW_NUMBER()`) → where dedup belongs after conversion | M | CRAFT | B8 |
 
@@ -189,7 +189,7 @@ Three units start from already-verified fact — see
 | F1 | What a hook is: `run_hooks` mechanics and the `selectattr` filter | M | SRC | — |
 | F2 | Hook rendering: when the Jinja inside a hook is evaluated | M | SRC | F1 |
 | F3 | Empty-hook skipping — why a conditional hook that renders blank is a no-op | S | SRC | F2 |
-| F4 | Exactly where hooks run in the BigQuery **incremental** materialization | M | SRC | F1 |
+| **F4** ✅ | [Exactly where hooks run in the BigQuery **incremental** materialization](F-hooks/F4-where-hooks-run.md) | M | SRC | F1 |
 | F5 | Where hooks run in the BigQuery **table** materialization, for contrast | S | SRC | F4 |
 | F6 | The `transaction` filter, and why `transaction: false` never fires on BigQuery | M | SRC + CORE✓ | F1 |
 | F7 | Ordering within a hook list | S | SRC | F1 |
@@ -202,7 +202,7 @@ Three units start from already-verified fact — see
 | F14 | `on-run-start` / `on-run-end` vs per-model hooks | M | CORE✓ | F10 |
 | F15 | Hooks that reference the temp relation — what's still alive when | M | SRC | F4 |
 | F16 | Hooks and failure semantics: what runs when the model fails | M | CORE✓ | F4 |
-| F17 | **When a hook is the wrong answer** | M | CRAFT | F8, F10 |
+| **F17** ✅ | [**When a hook is the wrong answer**](F-hooks/F17-when-a-hook-is-wrong.md) | M | CRAFT | F8, F10 |
 
 **F6 is now fully resolved, and the answer narrows the trap.** dbt-core defines
 `Hook.transaction: bool = True` (`artifacts/resources/v1/config.py`), so a
@@ -254,7 +254,7 @@ when you can show it matches.
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
 | H1 | What "correct" means for this particular conversion | M | CRAFT | A9 |
-| H2 | Row-count parity | S | CRAFT | H1 |
+| **H2** ✅ | [Row-count parity](H-verification/H2-row-count-parity.md) | S | CRAFT | H1 |
 | H3 | Checksum and hash parity | M | CRAFT | H2 |
 | H4 | Column-level diffing | M | CRAFT | H3 |
 | H5 | Shadow mode: running old and new in parallel | M | CRAFT | H1 |
@@ -355,10 +355,14 @@ Makes the track usable and covers the two highest-risk conversions end to end.
 [`A7`](A-assess/A7-what-not-to-convert.md) ✅ ·
 [`B8`](B-write-patterns/B8-merge-on-clause-to-unique-key.md) ✅ ·
 [`B13`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) ✅ ·
-`B14` · `F17` · `F4` · `H2` · `A9`
+[`B14`](B-write-patterns/B14-when-the-range-can-empty.md) ✅ ·
+[`F17`](F-hooks/F17-when-a-hook-is-wrong.md) ✅ ·
+[`F4`](F-hooks/F4-where-hooks-run.md) ✅ ·
+[`H2`](H-verification/H2-row-count-parity.md) ✅ ·
+[`A9`](A-assess/A9-correctness-baseline.md) ✅
 
-**Five written. `B14` is next**, and `B13` explicitly defers to it — until it
-exists, the most important warning in the track is a forward reference.
+**Wave 1 is complete.** The track now covers the two highest-risk conversions
+end to end, with assessment before and verification after. Wave 2 next.
 
 Rationale: E1 is the constraint everything references. A3 routes readers. B8 and
 B13 are the two conversions people actually arrive with. **B14 carries the
