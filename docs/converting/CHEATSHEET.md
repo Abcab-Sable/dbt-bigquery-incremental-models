@@ -7,7 +7,7 @@ Everything here is BigQuery-specific and matches `dbt-bigquery` 1.12.0 /
 `dbt-core` 1.12.3. Three incremental strategies exist — `merge`,
 `insert_overwrite`, `microbatch`. **There is no `delete+insert` and no `append`
 strategy on BigQuery**; rows below that look like they need one are doing it
-another way.
+another way. Nothing expresses an arbitrary `DELETE` either — see §4.
 
 ---
 
@@ -20,6 +20,7 @@ another way.
 | `CREATE VIEW` | `view` | [B3](B-write-patterns/B3-create-view.md) |
 | `MERGE` keyed on an id | `incremental`, `merge` | dbt generates the same statement — [B8](B-write-patterns/B8-merge-on-clause-to-unique-key.md) |
 | `DELETE` a date range + `INSERT` it back | `incremental`, `insert_overwrite` | One atomic `MERGE` instead of two statements — [B13](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) |
+| `DELETE` on anything else + `INSERT` | depends on the `WHERE` | Eight shapes, and only some are `insert_overwrite` — **§4** |
 | `INSERT` filtered on a watermark | `incremental`, `merge`, no `unique_key` | Append; watermark becomes `is_incremental()` — [B6](B-write-patterns/B6-watermark-filter.md) |
 | `INSERT`, watermark held in a state table | `incremental` | The state table becomes `{{ this }}` — an incremental model already has somewhere to keep state — [B7](B-write-patterns/B7-external-watermark.md) |
 | Unfiltered `INSERT ... SELECT` | `incremental`, `merge`, no `unique_key` | **First find out why it isn't already duplicating** — usually a transient source. Converting exposes the bug — [B5](B-write-patterns/B5-unfiltered-insert.md) |
@@ -48,7 +49,7 @@ WHEN NOT MATCHED BY SOURCE THEN DELETE;
 | `MERGE INTO <table>` | the model's name | — |
 | `USING ( ... )` | **the model body** | This is your `select`. [E1](E-translation/E1-one-statement-per-model.md) |
 | `ON T.k = S.k` | `unique_key='k'` | [B8](B-write-patterns/B8-merge-on-clause-to-unique-key.md) |
-| `ON` … extra key columns | `unique_key=['a','b']` | **Not null-safe** — see §5 |
+| `ON` … extra key columns | `unique_key=['a','b']` | **Not null-safe** — see §6 |
 | `ON` … non-key predicates | `incremental_predicates=[...]` | Use `DBT_INTERNAL_DEST` / `DBT_INTERNAL_SOURCE`, not `T`/`S` — [B12](B-write-patterns/B12-extra-predicates.md) |
 | `WHEN MATCHED THEN UPDATE SET` | generated, all columns | Narrow with `merge_update_columns` **xor** `merge_exclude_columns` — [B9](B-write-patterns/B9-when-matched-update.md) |
 | `WHEN MATCHED AND <cond>` | **the model body** | No config for it. Usually becomes dedup/qualify — [B11](B-write-patterns/B11-conditional-when-matched.md) |
@@ -64,6 +65,8 @@ WHEN NOT MATCHED BY SOURCE THEN DELETE;
 | Script shape | Do this |
 | --- | --- |
 | `DELETE` range, then `INSERT` range | `insert_overwrite` with `partitions=[...]` — never a `pre_hook` delete ([F9](F-hooks/F9-pre-hook-deletes.md)) |
+| `DELETE` on a non-partition predicate, then `INSERT` | Classify the `WHERE` first — **§4** |
+| `MERGE`, then a separate `DELETE` | Two concerns: an upsert and a purge. Split them — **§4** |
 | `UPDATE` then `INSERT` (upsert by hand) | One `merge` with `unique_key`. The `UPDATE`'s `SET` list ⇒ `merge_update_columns` |
 | `MERGE` then a second `UPDATE` to patch columns | Fold the patch into the model body; a second write to `{{ this }}` is [K2](K-antipatterns/K2-hooks-as-escape-hatch.md) |
 | `MERGE` into two tables | Two models — [C4](C-structural/C4-fan-out.md) |
@@ -74,13 +77,115 @@ WHEN NOT MATCHED BY SOURCE THEN DELETE;
 | `BEGIN TRANSACTION` / `COMMIT` | Nothing. dbt has no multi-statement transaction — [C9](C-structural/C9-transactions.md) |
 | `EXECUTE IMMEDIATE` building SQL | Jinja at compile time, or admit it's orchestration — [C10](C-structural/C10-dynamic-sql.md) |
 | `ASSERT` before the write | dbt test on the upstream model — [D12](D-data-movement/D12-assert-gates.md) |
-| `ALTER TABLE ADD COLUMN` | `on_schema_change` — but read §5, it is also a cost setting — [D8](D-data-movement/D8-add-column-migrations.md) |
+| `ALTER TABLE ADD COLUMN` | `on_schema_change` — but read §6, it is also a cost setting — [D8](D-data-movement/D8-add-column-migrations.md) |
 | `GRANT` after the write | `grants` config, not a `post_hook` — [F11](F-hooks/F11-grants-vs-post-hook.md) |
 | `EXPORT DATA` at the end | Orchestration, not a hook — [D2](D-data-movement/D2-export-data.md) |
 
 ---
 
-## 4. Config surface
+## 4. `DELETE` when the predicate isn't a partition range
+
+`insert_overwrite` is the answer only when the `DELETE`'s `WHERE` lines up with
+partition boundaries. Often it doesn't. The reframe that makes every other case
+tractable:
+
+> A dbt model declares **what the table should contain**, never **what to
+> remove**. So every `DELETE` has to be re-expressed as *which rows survive* —
+> and the scope you can say that over is either the whole table (`table`) or a
+> set of partitions (`insert_overwrite`). There is no third scope.
+
+Classify by what the `WHERE` touches:
+
+| `DELETE ... WHERE` | It's really | Convert as |
+| --- | --- | --- |
+| the partition column, any expression | partition replacement | `insert_overwrite`. Enumerable ⇒ static `partitions=[...]` — [B13](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) |
+| the same keys the `INSERT` supplies | an upsert written longhand | `merge` + `unique_key` — [B8](B-write-patterns/B8-merge-on-clause-to-unique-key.md) |
+| a non-partition column, rows confined to partitions you can compute | partition replacement, widened | `insert_overwrite` over the superset — **see below** |
+| an attribute with no partition relationship (`status = 'cancelled'`) | a redefinition of the whole table | `table`, or soft-delete — [B10](B-write-patterns/B10-not-matched-by-source.md) |
+| `IN (SELECT ... FROM other_table)` | an anti-join | `ref()` the other table, `where not exists` in the body — **see below** |
+| a range **wider** than the `INSERT` reloads | two concerns tangled | Split: a reload *and* a retention purge |
+| `date < <cutoff>`, nothing reinserted | retention, not a model | Partition expiration or a scheduled op — [K2](K-antipatterns/K2-hooks-as-escape-hatch.md), [K4](K-antipatterns/K4-run-operation-as-scheduler.md) |
+| nothing (`DELETE FROM t;`) | a replace | `table` — [B1](B-write-patterns/B1-create-or-replace-to-table.md) |
+
+### Widening to a partition superset
+
+The useful move when the delete predicate isn't the partition column, but the
+affected rows are reachable from it.
+
+```sql
+-- deletes by a non-partition column
+DELETE FROM analytics.orders WHERE customer_id IN (SELECT customer_id FROM raw.churned);
+INSERT INTO analytics.orders SELECT ... FROM raw.orders WHERE ...;
+```
+
+If those customers' orders all fall inside a known partition range, overwrite
+**those partitions in full**:
+
+```sql
+{{ config(
+    materialized='incremental',
+    incremental_strategy='insert_overwrite',
+    partition_by={'field': 'order_date', 'data_type': 'date', 'granularity': 'day'},
+    partitions=['date_sub(current_date(), interval 30 day)', '...']
+) }}
+
+select * from {{ source('raw', 'orders') }}
+where order_date >= date_sub(current_date(), interval 30 day)
+  and customer_id not in (select customer_id from {{ ref('churned') }})
+```
+
+**The trap, and it is the one that catches everyone:** once you overwrite a
+partition, the model must emit *every row that should remain in it* — not just
+the rows that changed. `insert_overwrite` replaces partitions wholesale. Emit
+only the delta and you have silently deleted every untouched row in those
+partitions. The run succeeds.
+
+This is only viable while the superset stays small. If a row from three years ago
+can be deleted today, you'd overwrite three years of partitions every run, and
+`table` is both cheaper and correct by construction.
+
+### Deletes driven by another table
+
+```sql
+DELETE FROM analytics.orders WHERE order_id IN (SELECT order_id FROM ops.deletion_log);
+```
+
+The deletion log becomes a first-class dependency, and the delete becomes an
+anti-join in the model body:
+
+```sql
+select o.* from {{ source('raw', 'orders') }} o
+where not exists (
+    select 1 from {{ ref('deletion_log') }} d where d.order_id = o.order_id
+)
+```
+
+Two things to get right. The log has to be **cumulative** — if it's purged after
+each run, the anti-join stops excluding rows the moment the log empties, and
+previously-deleted rows reappear. And this only removes rows on a scope you
+rewrite, so pair it with `table`, or with `insert_overwrite` over partitions wide
+enough to cover the log's reach.
+
+### When none of these fit
+
+You have an unbounded, arbitrary delete. Three honest answers, in order:
+
+1. **`materialized='table'`.** Correct by construction, no drift. Run the cost
+   numbers before dismissing it — [A7](A-assess/A7-what-not-to-convert.md).
+2. **Soft deletes.** Upstream marks rows deleted instead of removing them;
+   deletion becomes an update, which `merge` handles natively, and you keep the
+   audit trail. Needs a conversation with whoever owns the source.
+3. **Keep it out of dbt.** A genuine purge — GDPR erasure, retention — is an
+   operation on a table, not a model that defines one.
+
+What isn't on the list: a `pre_hook` or `post_hook` delete. Not atomic, invisible
+to the materialization, and on failure it leaves deleted data with no
+replacement — [F9](F-hooks/F9-pre-hook-deletes.md),
+[F17](F-hooks/F17-when-a-hook-is-wrong.md).
+
+---
+
+## 5. Config surface
 
 | Config | Default | The thing that bites |
 | --- | --- | --- |
@@ -99,7 +204,7 @@ Full table: [expert quick reference](../expert/04-quick-reference.md#config--beh
 
 ---
 
-## 5. Edge cases
+## 6. Edge cases
 
 Ordered by how often they cost a day.
 
@@ -113,6 +218,9 @@ Ordered by how often they cost a day.
 | New column silently missing | `on_schema_change='ignore'` takes columns from the **target** | Set `sync_all_columns` — and accept the temp table — [balanced](../balanced/07-schema-changes.md) |
 | Model got 2× slower after adding `on_schema_change` | Non-`ignore` forces a temp relation | Expected. It's a cost/safety trade — [balanced](../balanced/01-how-the-materialization-runs.md#when-a-temp-table-is-created-and-when-it-isnt) |
 | Rows with a `NULL` partition value accumulate | `array_agg(distinct ... IGNORE NULLS)` excludes them from the replacement set | Never let the partition column be null — [balanced](../balanced/04-insert-overwrite.md) |
+| Rows vanished from partitions the change never touched | Overwrote a partition superset but emitted only the changed rows. `insert_overwrite` replaces partitions **wholesale** | Emit every surviving row in every partition you overwrite — §4 |
+| Deleted rows came back a run later | Anti-join against a deletion log that gets purged between runs | The log must be cumulative — §4 |
+| Deletes propagate for recent rows, never for old ones | Overwrite window narrower than how far back a delete can reach | Widen, or `table` — §4 |
 | `pre_hook` deleted the data and the model then failed | Not atomic; two statements | `insert_overwrite` — [F9](F-hooks/F9-pre-hook-deletes.md) |
 | `microbatch` hooks fired once, not per batch | `pre_hook` on the first batch, `post_hook` on the last | By design — [balanced](../balanced/05-microbatch.md) |
 | Static `partitions` list replaced nothing | Literals compared against the **rendered** partition expression; wrong granularity ⇒ no match | Match the granularity exactly — [balanced](../balanced/06-partition-config.md) |
@@ -122,7 +230,7 @@ Ordered by how often they cost a day.
 
 ---
 
-## 6. No dbt equivalent — stop looking
+## 7. No dbt equivalent — stop looking
 
 | Construct | Reality |
 | --- | --- |
@@ -135,7 +243,7 @@ Ordered by how often they cost a day.
 
 ---
 
-## 7. Before you call it converted
+## 8. Before you call it converted
 
 1. It is idempotent — run it twice, get the same table — [E8](E-translation/E8-idempotency-proving.md).
 2. Row counts match the old table, per partition — [H2](H-verification/H2-row-count-parity.md).
