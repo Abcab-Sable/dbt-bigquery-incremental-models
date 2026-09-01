@@ -21,7 +21,7 @@ granularity rule, not an accident.
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
 **Status** — ✅ means written and linked. Everything else is `todo`.
-**36 of 138 done** — waves [1](#wave-1--foundation-10-units) and [2](#wave-2--completing-the-archetypes-26-units) complete.
+**63 of 138 done** — waves 1, 2 and 3 complete. Parts A, B, E, F and H are finished.
 
 **Deps** — units that should be written first, because this one links to them.
 
@@ -186,22 +186,22 @@ Three units start from already-verified fact — see
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| F1 | What a hook is: `run_hooks` mechanics and the `selectattr` filter | M | SRC | — |
-| F2 | Hook rendering: when the Jinja inside a hook is evaluated | M | SRC | F1 |
-| F3 | Empty-hook skipping — why a conditional hook that renders blank is a no-op | S | SRC | F2 |
+| **F1** ✅ | [What a hook is: `run_hooks` mechanics and the `selectattr` filter](F-hooks/F1-what-a-hook-is.md) | M | SRC | — |
+| **F2** ✅ | [Hook rendering: when the Jinja inside a hook is evaluated](F-hooks/F2-hook-rendering.md) | M | SRC | F1 |
+| **F3** ✅ | [Empty-hook skipping — why a conditional hook that renders blank is a no-op](F-hooks/F3-empty-hook-skipping.md) | S | SRC | F2 |
 | **F4** ✅ | [Exactly where hooks run in the BigQuery **incremental** materialization](F-hooks/F4-where-hooks-run.md) | M | SRC | F1 |
-| F5 | Where hooks run in the BigQuery **table** materialization, for contrast | S | SRC | F4 |
-| F6 | The `transaction` filter, and why `transaction: false` never fires on BigQuery | M | SRC + CORE✓ | F1 |
-| F7 | Ordering within a hook list | S | SRC | F1 |
-| F8 | pre-hook: the patterns worth keeping | M | CRAFT | F4 |
-| F9 | pre-hook: deleting rows before insert — and why it's usually the wrong shape | M | CRAFT | F8, B13 |
-| F10 | post-hook: the patterns worth keeping | M | CRAFT | F4 |
-| F11 | post-hook vs the `grants` config, and the ordering trap | M | SRC | F10 |
-| F12 | post-hook: table options and metadata | S | CRAFT | F10 |
-| F13 | post-hook: writing audit rows | M | CRAFT | F10 |
-| F14 | `on-run-start` / `on-run-end` vs per-model hooks | M | CORE✓ | F10 |
-| F15 | Hooks that reference the temp relation — what's still alive when | M | SRC | F4 |
-| F16 | Hooks and failure semantics: what runs when the model fails | M | CORE✓ | F4 |
+| **F5** ✅ | [Where hooks run in the BigQuery **table** materialization, for contrast](F-hooks/F5-table-materialization-hooks.md) | S | SRC | F4 |
+| **F6** ✅ | [The `transaction` filter, and why `transaction: false` never fires on BigQuery](F-hooks/F6-transaction-filter.md) | M | SRC + CORE✓ | F1 |
+| **F7** ✅ | [Ordering within a hook list](F-hooks/F7-hook-ordering.md) | S | SRC | F1 |
+| **F8** ✅ | [pre-hook: the patterns worth keeping](F-hooks/F8-pre-hook-patterns.md) | M | CRAFT | F4 |
+| **F9** ✅ | [pre-hook: deleting rows before insert — and why it's usually the wrong shape](F-hooks/F9-pre-hook-deletes.md) | M | CRAFT | F8, B13 |
+| **F10** ✅ | [post-hook: the patterns worth keeping](F-hooks/F10-post-hook-patterns.md) | M | CRAFT | F4 |
+| **F11** ✅ | [post-hook vs the `grants` config, and the ordering trap](F-hooks/F11-grants-vs-post-hook.md) | M | SRC | F10 |
+| **F12** ✅ | [post-hook: table options and metadata](F-hooks/F12-post-hook-table-options.md) | S | CRAFT | F10 |
+| **F13** ✅ | [post-hook: writing audit rows](F-hooks/F13-post-hook-audit-rows.md) | M | CRAFT | F10 |
+| **F14** ✅ | [`on-run-start` / `on-run-end` vs per-model hooks](F-hooks/F14-on-run-start-end.md) | M | CORE✓ | F10 |
+| **F15** ✅ | [Hooks that reference the temp relation — what's still alive when](F-hooks/F15-hooks-and-temp-relation.md) | M | SRC | F4 |
+| **F16** ✅ | [Hooks and failure semantics: what runs when the model fails](F-hooks/F16-hooks-and-failure.md) | M | CORE✓ | F4 |
 | **F17** ✅ | [**When a hook is the wrong answer**](F-hooks/F17-when-a-hook-is-wrong.md) | M | CRAFT | F8, F10 |
 
 **F6 is now fully resolved, and the answer narrows the trap.** dbt-core defines
@@ -253,19 +253,19 @@ when you can show it matches.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| H1 | What "correct" means for this particular conversion | M | CRAFT | A9 |
+| **H1** ✅ | [What "correct" means for this particular conversion](H-verification/H1-what-correct-means.md) | M | CRAFT | A9 |
 | **H2** ✅ | [Row-count parity](H-verification/H2-row-count-parity.md) | S | CRAFT | H1 |
-| H3 | Checksum and hash parity | M | CRAFT | H2 |
-| H4 | Column-level diffing | M | CRAFT | H3 |
-| H5 | Shadow mode: running old and new in parallel | M | CRAFT | H1 |
-| H6 | Shadow mode: how long, and what ends it | S | CRAFT | H5 |
-| H7 | Reconciling: row and column ordering | S | CRAFT | H4 |
-| H8 | Reconciling: null vs empty string vs absent | S | CRAFT | H4 |
-| H9 | Reconciling: float and `NUMERIC` precision | S | CRAFT | H4 |
-| H10 | Reconciling: timestamp precision and timezones | S | CRAFT | H4 |
-| H11 | Reconciling: differences that are *supposed* to exist | M | CRAFT | H4, B14 |
-| H12 | Encoding the script's implicit guarantees as dbt tests | M | CORE | H1 |
-| H13 | Sign-off criteria, and when it's safe to delete the old script | S | CRAFT | H6, I8 |
+| **H3** ✅ | [Checksum and hash parity](H-verification/H3-checksum-parity.md) | M | CRAFT | H2 |
+| **H4** ✅ | [Column-level diffing](H-verification/H4-column-level-diffing.md) | M | CRAFT | H3 |
+| **H5** ✅ | [Shadow mode: running old and new in parallel](H-verification/H5-shadow-mode.md) | M | CRAFT | H1 |
+| **H6** ✅ | [Shadow mode: how long, and what ends it](H-verification/H6-shadow-duration.md) | S | CRAFT | H5 |
+| **H7** ✅ | [Reconciling: row and column ordering](H-verification/H7-reconciling-ordering.md) | S | CRAFT | H4 |
+| **H8** ✅ | [Reconciling: null vs empty string vs absent](H-verification/H8-reconciling-nulls.md) | S | CRAFT | H4 |
+| **H9** ✅ | [Reconciling: float and `NUMERIC` precision](H-verification/H9-reconciling-numeric-precision.md) | S | CRAFT | H4 |
+| **H10** ✅ | [Reconciling: timestamp precision and timezones](H-verification/H10-reconciling-timestamps.md) | S | CRAFT | H4 |
+| **H11** ✅ | [Reconciling: differences that are *supposed* to exist](H-verification/H11-differences-that-should-exist.md) | M | CRAFT | H4, B14 |
+| **H12** ✅ | [Encoding the script's implicit guarantees as dbt tests](H-verification/H12-tests-from-guarantees.md) | M | CORE | H1 |
+| **H13** ✅ | [Sign-off criteria, and when it's safe to delete the old script](H-verification/H13-sign-off.md) | S | CRAFT | H6, I8 |
 
 H7–H10 exist separately because this is where conversions stall. Differences are
 usually legitimate, and without a triage framework people either chase noise for
@@ -361,9 +361,12 @@ Makes the track usable and covers the two highest-risk conversions end to end.
 [`H2`](H-verification/H2-row-count-parity.md) ✅ ·
 [`A9`](A-assess/A9-correctness-baseline.md) ✅
 
-**Waves 1 and 2 are complete.** Every write-pattern archetype is documented,
-assessment and statement-level translation are done end to end. Wave 3 next:
-the rest of hooks, and verification.
+**Waves 1–3 are complete.** Five of the eleven parts are finished: assessment,
+write-pattern archetypes, statement-level translation, hooks, and verification.
+That is the full path from "what have I got" to "the old script is retired".
+
+Remaining: Parts C and D (structural archetypes, data movement) in wave 4, and
+Parts G, I, J, K (scheduling, migration, operations, anti-patterns) in wave 5.
 
 Rationale: E1 is the constraint everything references. A3 routes readers. B8 and
 B13 are the two conversions people actually arrive with. **B14 carries the
@@ -384,7 +387,9 @@ Part A and Part E are now complete. Part B is complete except `B8`, `B13` and
 
 The two parts where being source-derived is a real differentiator.
 
-Remaining Part F (15) · remaining Part H (12)
+Remaining Part F (15) · remaining Part H (12) — **all written ✅**
+
+Parts F and H are now complete.
 
 ### Wave 4 — Structure and data movement (33 units)
 

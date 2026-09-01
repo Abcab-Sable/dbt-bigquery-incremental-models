@@ -1,9 +1,10 @@
 # The conversion track
 
-**Status: waves 1 and 2 complete — 36 of 138 units written.**
+**Status: waves 1–3 complete — 63 of 138 units written.**
 
-Every write-pattern archetype is documented. Assessment and statement-level
-translation are complete end to end.
+Five of the eleven parts are finished, covering the full path from *what have I
+got* through to *the old script is retired*: assessment, write-pattern
+archetypes, statement-level translation, hooks, and verification.
 
 ## Written so far
 
@@ -55,13 +56,45 @@ translation are complete end to end.
 | [B15](B-write-patterns/B15-truncate-insert.md) | `TRUNCATE` + `INSERT` |
 | [B16](B-write-patterns/B16-deduplication.md) | Deduplication scripts |
 
-### Hooks and verification — *partial*
+### Hooks — *complete*
 
 | | |
 | --- | --- |
+| [F1](F-hooks/F1-what-a-hook-is.md) | What a hook actually is |
+| [F2](F-hooks/F2-hook-rendering.md) | Hook rendering |
+| [F3](F-hooks/F3-empty-hook-skipping.md) | Empty-hook skipping |
 | [F4](F-hooks/F4-where-hooks-run.md) | Exactly where hooks run |
-| [F17](F-hooks/F17-when-a-hook-is-wrong.md) | When a hook is the wrong answer |
+| [F5](F-hooks/F5-table-materialization-hooks.md) | Hooks in the `table` materialization |
+| [F6](F-hooks/F6-transaction-filter.md) | The `transaction` filter |
+| [F7](F-hooks/F7-hook-ordering.md) | Ordering within a hook list |
+| [F8](F-hooks/F8-pre-hook-patterns.md) | pre-hook patterns worth keeping |
+| [F9](F-hooks/F9-pre-hook-deletes.md) | pre-hook deletes — the common bad conversion |
+| [F10](F-hooks/F10-post-hook-patterns.md) | post-hook patterns worth keeping |
+| [F11](F-hooks/F11-grants-vs-post-hook.md) | post-hook vs the `grants` config |
+| [F12](F-hooks/F12-post-hook-table-options.md) | post-hook: table options |
+| [F13](F-hooks/F13-post-hook-audit-rows.md) | post-hook: audit rows |
+| [F14](F-hooks/F14-on-run-start-end.md) | `on-run-start` / `on-run-end` |
+| [F15](F-hooks/F15-hooks-and-temp-relation.md) | Hooks and the temp relation |
+| [F16](F-hooks/F16-hooks-and-failure.md) | Hooks and failure semantics |
+| [F17](F-hooks/F17-when-a-hook-is-wrong.md) | **When a hook is the wrong answer** |
+
+### Proving correctness — *complete*
+
+| | |
+| --- | --- |
+| [H1](H-verification/H1-what-correct-means.md) | What "correct" means here |
 | [H2](H-verification/H2-row-count-parity.md) | Row-count parity |
+| [H3](H-verification/H3-checksum-parity.md) | Checksum and hash parity |
+| [H4](H-verification/H4-column-level-diffing.md) | Column-level diffing |
+| [H5](H-verification/H5-shadow-mode.md) | Shadow mode |
+| [H6](H-verification/H6-shadow-duration.md) | How long to shadow |
+| [H7](H-verification/H7-reconciling-ordering.md) | Reconciling: ordering |
+| [H8](H-verification/H8-reconciling-nulls.md) | Reconciling: nulls |
+| [H9](H-verification/H9-reconciling-numeric-precision.md) | Reconciling: numeric precision |
+| [H10](H-verification/H10-reconciling-timestamps.md) | Reconciling: timestamps |
+| [H11](H-verification/H11-differences-that-should-exist.md) | Differences that should exist |
+| [H12](H-verification/H12-tests-from-guarantees.md) | Tests from the script's guarantees |
+| [H13](H-verification/H13-sign-off.md) | Sign-off and retiring the script |
 
 ## Where to start
 
