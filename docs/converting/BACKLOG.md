@@ -16,7 +16,8 @@ granularity rule, not an accident.
 | Tag | Meaning |
 | --- | --- |
 | `SRC` | Verifiable against dbt-adapters at the [pinned commit](../../README.md). Same standard as the rest of the repo. |
-| `CORE` | Depends on dbt-core, which has **not** been read. Needs its own pinned commit before being written as fact. |
+| `CORE` | Depends on dbt-core, now [pinned](../../README.md) at `1.latest` @ `300e80c` / released 1.12.3. Verifiable, but the specific behaviour still needs reading. |
+| `CORE✓` | dbt-core behaviour **already verified** in source. Ready to write. |
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
 **Status** — all `todo`. Column kept so it stays useful as we work.
@@ -180,7 +181,7 @@ statements get swept into a `post_hook` and the model quietly becomes a script
 again.
 
 Three units start from already-verified fact — see
-[the track index](README.md#three-findings-already-banked).
+[the track index](README.md#findings-already-banked).
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
@@ -189,7 +190,7 @@ Three units start from already-verified fact — see
 | F3 | Empty-hook skipping — why a conditional hook that renders blank is a no-op | S | SRC | F2 |
 | F4 | Exactly where hooks run in the BigQuery **incremental** materialization | M | SRC | F1 |
 | F5 | Where hooks run in the BigQuery **table** materialization, for contrast | S | SRC | F4 |
-| F6 | The `transaction` filter, and why `transaction: false` never fires on BigQuery | M | SRC + CORE | F1 |
+| F6 | The `transaction` filter, and why `transaction: false` never fires on BigQuery | M | SRC + CORE✓ | F1 |
 | F7 | Ordering within a hook list | S | SRC | F1 |
 | F8 | pre-hook: the patterns worth keeping | M | CRAFT | F4 |
 | F9 | pre-hook: deleting rows before insert — and why it's usually the wrong shape | M | CRAFT | F8, B13 |
@@ -197,18 +198,22 @@ Three units start from already-verified fact — see
 | F11 | post-hook vs the `grants` config, and the ordering trap | M | SRC | F10 |
 | F12 | post-hook: table options and metadata | S | CRAFT | F10 |
 | F13 | post-hook: writing audit rows | M | CRAFT | F10 |
-| F14 | `on-run-start` / `on-run-end` vs per-model hooks | M | CORE | F10 |
+| F14 | `on-run-start` / `on-run-end` vs per-model hooks | M | CORE✓ | F10 |
 | F15 | Hooks that reference the temp relation — what's still alive when | M | SRC | F4 |
-| F16 | Hooks and failure semantics: what runs when the model fails | M | CORE | F4 |
+| F16 | Hooks and failure semantics: what runs when the model fails | M | CORE✓ | F4 |
 | F17 | **When a hook is the wrong answer** | M | CRAFT | F8, F10 |
 
-**F6 is tagged twice deliberately.** The filtering is verified in dbt-adapters:
-`run_hooks` does `selectattr('transaction', 'equalto', inside_transaction)`, and
-every BigQuery materialization calls it only at the `True` default. What is **not**
-verified is the default `transaction` value dbt-core assigns a plain-string hook.
-If that default is `True`, ordinary hooks are unaffected and only explicit
-`transaction: false` silently vanishes. Read dbt-core and pin it before writing
-this as fact.
+**F6 is now fully resolved, and the answer narrows the trap.** dbt-core defines
+`Hook.transaction: bool = True` (`artifacts/resources/v1/config.py`), so a
+plain-string hook defaults to `True` — which matches the only `inside_transaction`
+value any BigQuery materialization passes. **Ordinary hooks are unaffected.** Only
+an explicit `transaction: false` is filtered out by `selectattr` and silently
+never runs. Write it as a narrow, real trap rather than a broad one.
+
+**F16 is partly resolved.** For microbatch models, `task/run.py` clears
+`pre_hook` on every batch except the first and `post_hook` on every batch except
+the last — hooks fire once per model, not once per batch. What still needs
+reading is what happens to a post-hook when the model itself fails.
 
 **F11's trap is source-verified:** post-hooks run *before* `apply_grants`, so a
 post-hook granting access races the config rather than composing with it.
@@ -227,7 +232,7 @@ work; this one explains why the answer is usually a model.
 | G3 | Passing dates in: `vars` and `--vars` | M | CORE | — |
 | G4 | Environment variables and secrets | S | CORE | G3 |
 | G5 | Backfill via `--full-refresh` | M | SRC | — |
-| G6 | Backfill via microbatch | M | CORE | G5 |
+| G6 | Backfill via microbatch | M | CORE✓ | G5 |
 | G7 | Backfill via explicit partition ranges | M | SRC | G5, B13 |
 | G8 | Late-arriving data after conversion | M | CRAFT | B6 |
 | G9 | Selectors: `--select`, `--exclude` | S | CORE | — |
@@ -376,16 +381,33 @@ Part G (11) · Part I (10) · Part J (9) · Part K (12)
 
 Waves sum to 138.
 
-### Blocking decision
+### dbt-core is now pinned
 
-**Seventeen units depend on dbt-core and cannot be written as fact until it is
-read and pinned** the way dbt-adapters already is:
+The blocker is cleared. dbt-core is pinned alongside dbt-adapters in
+[the repository README](../../README.md) — `1.latest` @ `300e80c`, released
+1.12.3, with released-vs-branch diffing done the same way.
 
-`C2` · `C13` · `D1` · `E2` · `E3` · `E11` · `F6` · `F14` · `F16` · `G3` · `G4` ·
-`G6` · `G9` · `G10` · `H12` · `J4` · `J6`
+**One trap found in the process, worth recording:** `dbt-labs/dbt-core`'s `main`
+branch is no longer the Python implementation. It hosts **dbt Core v2.0, a Rust
+rewrite** (the Fusion engine, beta). The Python dbt Core lives on `1.latest`.
+Pinning `main` would have documented a different engine.
 
-That's 16 tagged `CORE` outright, plus `F6` tagged `SRC + CORE` — half verified
-already, half not.
+**Four of the seventeen are already verified** and marked `CORE✓` — ready to
+write without further reading:
+
+| Unit | Resolved |
+| --- | --- |
+| `F6` | `Hook.transaction` defaults to `True`; only explicit `transaction: false` vanishes on BigQuery |
+| `F14` | `RunHookType.Start`/`End` = `on-run-start`/`on-run-end` |
+| `F16` | *(partly)* microbatch clears `pre_hook` after batch 0 and `post_hook` before the last batch |
+| `G6` | Full batching machinery: `BatchSize`, `lookback`, `begin`, boundary maths, per-batch context |
+
+**Thirteen still need reading**, but are no longer blocked — just unstarted:
+
+`C2` · `C13` · `D1` · `E2` · `E3` · `E11` · `G3` · `G4` · `G9` · `G10` · `H12` ·
+`J4` · `J6`
+
+`E2` and `E3` remain the ones to do first, since they land in Wave 2.
 
 `E2` and `E3` land in Wave 2, so this blocks early. Two options — pin dbt-core
 now, or write those units with their uncertainty stated inline. Worth deciding

@@ -119,10 +119,20 @@ Case-sensitive `!=` against un-lowercased values. `granularity`'s `day` default
 is applied during parsing, so an omitted key is `None` here and fails the check —
 `granularity` is effectively mandatory under `microbatch`.
 
-Batch orchestration (`event_time`, `begin`, `lookback`, splitting, retry) is
-dbt-core. No occurrences in dbt-adapters at the pinned commit; the only
-`batch_size` reference outside this macro is an unrelated seed helper. Not
-verified here.
+Batch orchestration is dbt-core — no occurrences in dbt-adapters at the pinned
+commit; the only `batch_size` reference outside this macro is an unrelated seed
+helper. Now pinned separately (`1.latest` @ `300e80c`, released 1.12.3):
+
+| Fact | Source |
+| --- | --- |
+| `BatchSize` ∈ {`hour`,`day`,`month`,`year`} | `artifacts/resources/types.py` |
+| `lookback` default `1`; `begin` default `None` but required | `artifacts/resources/v1/config.py` |
+| `end` = `ceiling_timestamp(event_time_end or now, batch_size)`, UTC | `microbatch.py` |
+| `start` = `event_time_start` ▸ `begin` ▸ `offset(checkpoint, -lookback)` | `microbatch.py` |
+| checkpoint exactly on a boundary ⇒ `lookback += 1` | `microbatch.py` |
+| final batch end is the exact `end`, not a boundary | `build_batches` |
+| per-batch context forces `is_incremental()=True`, `should_full_refresh()=False` | `build_jinja_context_for_batch` |
+| `pre_hook` first batch only; `post_hook` last batch only | `task/run.py` |
 
 ## Schema change detection
 

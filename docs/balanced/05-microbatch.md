@@ -56,23 +56,87 @@ key is `None` and will not equal your `batch_size`.
 
 ## What lives in dbt-core instead
 
-Everything that makes `microbatch` *microbatch* is orchestration, and it is not
-in `dbt-adapters`. Searching the repository at the pinned commit for
+Everything that makes `microbatch` *microbatch* is orchestration, and none of it
+is in `dbt-adapters`. Searching the repository at the pinned commit for
 `event_time`, `lookback`, or `__dbt_internal_microbatch` returns no hits in the
-incremental macros. The only `batch_size` reference outside this file is an
+incremental macros; the only `batch_size` reference outside this file is an
 unrelated seed helper.
 
-So the following are **dbt-core** behaviour, and this reference does not document
-them — it hasn't read that source:
+That orchestration lives in `dbt-core`, which is now pinned alongside the adapter
+— see [the repository README](../../README.md). Source:
+`core/dbt/materializations/incremental/microbatch.py` and `core/dbt/task/run.py`.
 
-- `event_time`, `begin`, `lookback` configs
-- splitting a run into batches and computing each batch's time window
-- injecting the time filter into your model
-- per-batch execution, retry, and parallelism
-- `--event-time-start` / `--event-time-end`
+### The configs
 
-If you need those pinned to a version the way this reference pins the adapter,
-read them in `dbt-labs/dbt-core` and record the commit alongside this one.
+| Config | Default | Behaviour |
+| --- | --- | --- |
+| `batch_size` | none | Required. One of `hour`, `day`, `month`, `year` (the `BatchSize` enum). Missing ⇒ runtime error. |
+| `begin` | `None` | Required on the first run, or when there's no checkpoint. Missing ⇒ *requires a 'begin' configuration*. |
+| `lookback` | `1` | How many batches before the checkpoint to reprocess. |
+| `event_time` | `None` | The column batches are cut on. |
+
+All timestamps are coerced to **UTC** (`pytz.UTC`).
+
+### How the window is computed
+
+`build_end_time` takes `event_time_end` if given, else now, and rounds it **up**
+to the batch boundary (`ceiling_timestamp`).
+
+`build_start_time` has three cases, in order:
+
+1. `event_time_start` given ⇒ use it, truncated down to the batch boundary.
+2. First run, or no checkpoint ⇒ use `begin`, truncated.
+3. Otherwise ⇒ `offset_timestamp(checkpoint, batch_size, -lookback)`.
+
+Case 3 carries a subtlety worth knowing. If the checkpoint sits *exactly* on a
+batch boundary, `lookback` is silently incremented by one:
+
+```python
+if checkpoint == MicrobatchBuilder.truncate_timestamp(checkpoint, batch_size):
+    lookback += 1
+```
+
+The source explains why: a checkpoint on the line means the last batch *ends*
+there, so the start has to come from the previous period. A run landing exactly
+on midnight therefore reprocesses one batch more than `lookback` suggests.
+
+### How batches are cut
+
+`build_batches` walks from start to end, each batch running from one boundary to
+the next, then overwrites the final batch's end with the **exact** `end` value
+rather than a rounded one. So every batch is a whole period except the last,
+which is truncated to the real end time.
+
+### Hooks fire per model, not per batch
+
+This one surprises people, and it's in `task/run.py`:
+
+```python
+# Only run pre_hook(s) for first batch
+if batch_idx != 0:
+    node_copy.config.pre_hook = []
+
+# Only run post_hook(s) for last batch
+if batch_idx != len(batches) - 1:
+    node_copy.config.post_hook = []
+```
+
+A 400-batch backfill runs your `pre_hook` **once** and your `post_hook` **once**,
+not 400 times each. If you were relying on a post-hook to fire per batch, it
+won't — and if you were worried it would, it doesn't.
+
+### Each batch's Jinja context
+
+`build_jinja_context_for_batch` sets, for batches running incrementally:
+
+```python
+jinja_context["is_incremental"] = lambda: True
+jinja_context["should_full_refresh"] = lambda: False
+```
+
+So inside a batch, `is_incremental()` is **forced true** and
+`should_full_refresh()` **forced false**, regardless of what the adapter-side
+macros would otherwise have computed.
 
 ## When it's worth it
 

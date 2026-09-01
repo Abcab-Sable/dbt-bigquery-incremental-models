@@ -180,12 +180,13 @@ overhead and buys nothing.
 Everything about the trap above applies here too — an empty batch doesn't clear
 its partition.
 
-> **A note on where this comes from.** Everything in this documentation was
-> checked against dbt's source code, except the batching machinery itself
-> (`event_time`, `begin`, `lookback`, how batches get split). That lives in a
-> different codebase which wasn't read. The configs above are shown as you'd
-> write them, but treat the batching details as "check the official docs",
-> unlike everything else here.
+> **Two things worth knowing**, both checked in dbt's source. `begin` is
+> **required** — leave it out and the first run fails with *requires a 'begin'
+> configuration*. And your `pre_hook` and `post_hook` run **once for the whole
+> model, not once per batch**: the pre-hook fires on the first batch only, the
+> post-hook on the last. A 400-batch backfill runs each of them once.
+>
+> More detail on the [balanced track](../balanced/05-microbatch.md#what-lives-in-dbt-core-instead).
 
 ## The hidden setting that changes everything
 

@@ -19,7 +19,7 @@ BigQuery overrides the default incremental materialization entirely. No
 intermediate relation, no `rename_relation` swap. Three strategies, of which
 `microbatch` delegates verbatim to the `insert_overwrite` builder — identical
 emitted SQL, differing only in compile-time validation and dbt-core's batch
-orchestration.
+orchestration, which is now pinned too.
 
 All three strategies emit a `MERGE`. `insert_overwrite` is cheaper than `merge`
 not because it avoids `MERGE` but because its predicate bounds the target side to

@@ -54,8 +54,9 @@ See [the track index](docs/converting/README.md) and
   null-safe macro. → [expert](docs/expert/03-semantics.md#unique_key-three-branches-two-behaviours)
 - **`merge` without a `unique_key` is append-only.** The merge condition becomes
   `on FALSE`. → [balanced](docs/balanced/02-choosing-a-strategy.md#merge-without-a-unique_key-is-append-only)
-- **`microbatch` emits identical SQL to `insert_overwrite`** on BigQuery. The
-  batching is entirely dbt-core. → [balanced](docs/balanced/05-microbatch.md)
+- **`microbatch` emits identical SQL to `insert_overwrite`** on BigQuery, and its
+  hooks fire **once per model, not once per batch** — `pre_hook` on the first
+  batch only, `post_hook` on the last. → [balanced](docs/balanced/05-microbatch.md)
 - **`require_partition_filter` gives you no pruning.** dbt satisfies it with a
   tautology. → [balanced](docs/balanced/03-merge.md#the-require_partition_filter-predicate)
 
@@ -68,21 +69,30 @@ See [the track index](docs/converting/README.md) and
 | Generic `MERGE` builders | `dbt-adapters/src/dbt/include/global_project/macros/materializations/models/incremental/merge.sql` |
 | `partition_by` parsing and rendering | `dbt-bigquery/src/dbt/adapters/bigquery/relation_configs/_partition.py` |
 | Full-refresh replaceability checks | `dbt-bigquery/src/dbt/adapters/bigquery/impl.py` |
-| Batch orchestration for `microbatch` | `dbt-core` — **not** in this repo, see [the microbatch page](docs/balanced/05-microbatch.md) |
+| Batch orchestration for `microbatch` | `dbt-core`, `core/dbt/materializations/incremental/microbatch.py` |
+| Hook execution and the `transaction` default | `dbt-core`, `core/dbt/artifacts/resources/v1/config.py` and `core/dbt/task/run.py` |
 
 A per-concern file map is in the
 [expert quick reference](docs/expert/04-quick-reference.md#source-map).
 
 **Pinned to these exact versions, read on 2026-09-01:**
 
-- **Repository:** `dbt-labs/dbt-adapters` at commit
-  [`e7553c7fa6cdc82f1455be2035e4e948e7540792`](https://github.com/dbt-labs/dbt-adapters/commit/e7553c7fa6cdc82f1455be2035e4e948e7540792)
-  (`main`, committed 2026-08-31)
-- **Released package:** `dbt-bigquery` **1.12.0** on
-  [PyPI](https://pypi.org/project/dbt-bigquery/1.12.0/)
+| Repository | Ref | Commit | Released package |
+| --- | --- | --- | --- |
+| `dbt-labs/dbt-adapters` | `main` | [`e7553c7`](https://github.com/dbt-labs/dbt-adapters/commit/e7553c7fa6cdc82f1455be2035e4e948e7540792) (2026-08-31) | `dbt-bigquery` [1.12.0](https://pypi.org/project/dbt-bigquery/1.12.0/) |
+| `dbt-labs/dbt-core` | **`1.latest`** | [`300e80c`](https://github.com/dbt-labs/dbt-core/commit/300e80c7a24a4ae832f284163e424606bcefea89) (2026-09-01) | `dbt-core` [1.12.3](https://pypi.org/project/dbt-core/1.12.3/) |
 
-Those two are not the same tree — `main` reports `1.12.0rc1` in its
-`__version__.py`, while PyPI ships `1.12.0`. Both were checked:
+> **Read the branch column carefully.** `dbt-labs/dbt-core`'s `main` branch is no
+> longer the Python implementation — it now hosts **dbt Core v2.0 (beta), a
+> ground-up rewrite in Rust** that underpins the Fusion engine. The Python dbt
+> Core that ships as `dbt-core` on PyPI lives on the **`1.latest`** branch.
+> Pinning `main` here would have documented a different engine from the one you
+> are running.
+
+### dbt-adapters: released 1.12.0 vs `main`
+
+`main` reports `1.12.0rc1` in its `__version__.py`, while PyPI ships `1.12.0`.
+Both were checked:
 
 - **All incremental macro files are byte-identical** between released 1.12.0 and
   `main` at the pinned commit. Everything this reference says about generated SQL
@@ -94,17 +104,25 @@ Those two are not the same tree — `main` reports `1.12.0rc1` in its
   [balanced](docs/balanced/06-partition-config.md#int64-range-partitions-get-boundary-normalisation)
   and [expert](docs/expert/03-semantics.md#released-vs-main-delta).
 
-Unless a page says otherwise, it describes **released 1.12.0** — the version you
-get from `pip install dbt-bigquery`.
+### dbt-core: released 1.12.3 vs `1.latest`
+
+The branch is at `1.14.0a1` while PyPI ships `1.12.3`, so the same check was run:
+
+- **`microbatch.py` is byte-identical** between released 1.12.3 and `1.latest` at
+  the pinned commit.
+- The hook `transaction` default, the `lookback`/`begin`/`event_time` defaults,
+  and the per-batch hook handling in `task/run.py` are identical in both.
+
+Unless a page says otherwise, it describes **released `dbt-bigquery` 1.12.0 and
+`dbt-core` 1.12.3** — what you get from `pip install`.
 
 ## Scope
 
 BigQuery only. Other adapters implement the same strategy names with different
 SQL, and the differences are not cosmetic — don't carry these conclusions across.
 
-The `microbatch` batching machinery (`event_time`, `begin`, `lookback`, batch
-splitting) lives in dbt-core and was **not** read. It is flagged as unverified
-wherever it comes up, rather than described from memory.
+dbt Core v2.0 (the Rust rewrite) is **not** covered. Everything here describes
+the Python implementation, which is what `pip install dbt-core` gives you today.
 
 This is plain markdown with no build step. Read it on github.com, or clone it.
 

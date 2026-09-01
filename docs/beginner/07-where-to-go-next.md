@@ -60,10 +60,10 @@ when you know the material and need to check one specific thing.
 
 ## What this documentation deliberately doesn't cover
 
-**The batching machinery for `microbatch`.** `event_time`, `begin`, `lookback`,
-and how dbt splits a run into batches all live in dbt-core, a different codebase
-that wasn't read for this. Everything else here was verified against source;
-that part wasn't, and it's flagged wherever it comes up.
+**dbt Core v2.0.** dbt has been rewritten in Rust as the Fusion engine, and that
+is a different implementation from the Python one described here. Everything in
+this documentation describes the Python dbt Core, which is what `pip install`
+gives you today.
 
 **Other data warehouses.** Snowflake, Redshift, Databricks and the rest implement
 the same *strategy names* with genuinely different SQL. Don't carry these

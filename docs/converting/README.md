@@ -50,7 +50,8 @@ So every unit in the backlog carries a tag:
 | Tag | Meaning |
 | --- | --- |
 | `SRC` | Verifiable against `dbt-labs/dbt-adapters` at the [pinned commit](../../README.md). Held to the same standard as the rest of the repo. |
-| `CORE` | Depends on dbt-core behaviour, which has **not** been read. Needs its own pinned commit before being written as fact. |
+| `CORE` | Depends on dbt-core, now pinned at `1.latest` @ `300e80c` / released 1.12.3. Verifiable; the specific behaviour still needs reading. |
+| `CORE✓` | dbt-core behaviour already verified. Ready to write. |
 | `CRAFT` | Judgment and practice. Not derivable from any source. Will be written as advice, and labelled as such. |
 
 Mixing these silently would undermine the thing that makes this repo worth
@@ -77,7 +78,7 @@ page, it is already split. Full breakdown with sizes, sourcing and dependencies
 in [the backlog](BACKLOG.md), which also sets out
 [five delivery waves](BACKLOG.md#delivery-waves).
 
-## Three findings already banked
+## Findings already banked
 
 Verified in source while scoping this track, so Part D starts from fact rather
 than folklore:
@@ -93,6 +94,17 @@ than folklore:
   (`if (rendered | length) > 0`), which is why a conditional hook that produces
   nothing is a no-op rather than an error.
 
+Since dbt-core was pinned, three more, from `dbt-core` at `1.latest` @ `300e80c`:
+
+- **`Hook.transaction` defaults to `True`**, which is what every BigQuery
+  materialization passes. So ordinary hooks are fine; the trap above is narrow,
+  hitting only an explicit `transaction: false`.
+- **Microbatch hooks fire once per model, not once per batch** — `pre_hook` on
+  the first batch, `post_hook` on the last. A 400-batch backfill runs each once.
+- **A microbatch checkpoint sitting exactly on a batch boundary silently
+  increments `lookback` by one**, so that run reprocesses one batch more than
+  configured.
+
 ## Where to start
 
 The backlog opens with a [ten-unit first wave](BACKLOG.md#wave-1--foundation-10-units)
@@ -101,10 +113,10 @@ the two conversions people actually arrive with — a hand-written `MERGE` and a
 `DELETE`+`INSERT` — end to end, with the reasoning and the verification either
 side of them.
 
-**One decision blocks early work.** Seventeen units depend on dbt-core, which has
-not been read. Two of them land in Wave 2, so this needs deciding before then:
-pin dbt-core the way dbt-adapters is pinned, or write those units with their
-uncertainty stated inline.
+**That blocker is cleared.** dbt-core is now pinned alongside dbt-adapters, and
+four of the seventeen dependent units are already verified. Thirteen still need
+reading, but none are blocked. See
+[the backlog](BACKLOG.md#dbt-core-is-now-pinned).
 
 ---
 
