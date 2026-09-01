@@ -203,7 +203,12 @@ not to do.
 
 ## Where to start
 
-Read [E1](E-translation/E1-one-statement-per-model.md), then
+**In a hurry, or converting a specific statement?** The
+[statement-pattern cheatsheet](CHEATSHEET.md) is the whole track compressed into
+one page: statement shape → strategy → config, `MERGE` clause by clause, and the
+edge cases ranked by how often they cost a day. Every row links back here.
+
+Otherwise: read [E1](E-translation/E1-one-statement-per-model.md), then
 [A3](A-assess/A3-classify-by-write-pattern.md) to find your archetype, then the
 matching Part B page.
 

@@ -40,6 +40,12 @@ how to operate it afterwards, and what not to do. Start at
 [one statement per model](docs/converting/E-translation/E1-one-statement-per-model.md),
 or see [the track index](docs/converting/README.md).
 
+**[📋 Statement-pattern cheatsheet](docs/converting/CHEATSHEET.md)** — one page:
+which strategy each script shape becomes, `MERGE` translated clause by clause,
+the combinations (delete+insert, update-then-insert, multi-statement), and the
+edge cases — no `unique_key`, nullable composite keys, ranges that legitimately
+empty — with the symptom you'd actually see listed first.
+
 ## The findings, if you only read one thing
 
 - **Dynamic `insert_overwrite` never empties a partition.** The replacement set is
