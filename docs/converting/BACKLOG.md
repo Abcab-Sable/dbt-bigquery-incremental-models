@@ -21,7 +21,7 @@ granularity rule, not an accident.
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
 **Status** — ✅ means written and linked. Everything else is `todo`.
-**10 of 138 done** — [wave 1](#wave-1--foundation-10-units) complete.
+**36 of 138 done** — waves [1](#wave-1--foundation-10-units) and [2](#wave-2--completing-the-archetypes-26-units) complete.
 
 **Deps** — units that should be written first, because this one links to them.
 
@@ -43,14 +43,14 @@ converting the right thing without knowing what "correct" meant.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| A1 | Inventory: enumerate every script, its schedule, and its owner | S | CRAFT | — |
-| A2 | Map declared dependencies against actual ones | M | CRAFT | A1 |
+| **A1** ✅ | [Inventory: enumerate every script, its schedule, and its owner](A-assess/A1-inventory.md) | S | CRAFT | — |
+| **A2** ✅ | [Map declared dependencies against actual ones](A-assess/A2-map-dependencies.md) | M | CRAFT | A1 |
 | **A3** ✅ | [Classify by write pattern: replace / append / upsert / delete-insert / DDL / side-effect](A-assess/A3-classify-by-write-pattern.md) | M | CRAFT | — |
-| A4 | Classify by trigger: cron, event-driven, manual, chained | S | CRAFT | A1 |
-| A5 | Find the hidden state: manual steps, assumed-existing objects | M | CRAFT | — |
-| A6 | Find compensating hacks — the fixes that encode an upstream bug | M | CRAFT | A5 |
+| **A4** ✅ | [Classify by trigger: cron, event-driven, manual, chained](A-assess/A4-classify-by-trigger.md) | S | CRAFT | A1 |
+| **A5** ✅ | [Find the hidden state: manual steps, assumed-existing objects](A-assess/A5-hidden-state.md) | M | CRAFT | — |
+| **A6** ✅ | [Find compensating hacks — the fixes that encode an upstream bug](A-assess/A6-compensating-hacks.md) | M | CRAFT | A5 |
 | **A7** ✅ | [Decide what **not** to convert](A-assess/A7-what-not-to-convert.md) | S | CRAFT | A3 |
-| A8 | Estimate conversion risk per script | S | CRAFT | A3, A5 |
+| **A8** ✅ | [Estimate conversion risk per script](A-assess/A8-estimate-risk.md) | S | CRAFT | A3, A5 |
 | **A9** ✅ | [Capture the correctness baseline before touching anything](A-assess/A9-correctness-baseline.md) | M | CRAFT | — |
 
 A3 is the spine of Parts B–D: classification picks the archetype page.
@@ -66,22 +66,22 @@ before/after, and what breaks in translation.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| B1 | `CREATE OR REPLACE TABLE ... AS SELECT` → `materialized='table'` | S | SRC | E1 |
-| B2 | `CREATE TABLE IF NOT EXISTS` bootstrap → letting dbt own creation | S | SRC | B1 |
-| B3 | `CREATE [OR REPLACE] VIEW` → `materialized='view'` | S | SRC | — |
-| B4 | Materialized view managed by script → the MV materialization | M | SRC | B3 |
-| B5 | Unfiltered `INSERT INTO ... SELECT` → incremental, append semantics | M | SRC | E1 |
-| B6 | `INSERT` with a watermark filter → incremental + `is_incremental()` | M | SRC | B5 |
-| B7 | Watermark held in a separate state table → replacing it with `{{ this }}` | M | CRAFT | B6 |
+| **B1** ✅ | [`CREATE OR REPLACE TABLE ... AS SELECT` → `materialized='table'`](B-write-patterns/B1-create-or-replace-to-table.md) | S | SRC | E1 |
+| **B2** ✅ | [`CREATE TABLE IF NOT EXISTS` bootstrap → letting dbt own creation](B-write-patterns/B2-create-if-not-exists.md) | S | SRC | B1 |
+| **B3** ✅ | [`CREATE [OR REPLACE] VIEW` → `materialized='view'`](B-write-patterns/B3-create-view.md) | S | SRC | — |
+| **B4** ✅ | [Materialized view managed by script → the MV materialization](B-write-patterns/B4-materialized-views.md) | M | SRC | B3 |
+| **B5** ✅ | [Unfiltered `INSERT INTO ... SELECT` → incremental, append semantics](B-write-patterns/B5-unfiltered-insert.md) | M | SRC | E1 |
+| **B6** ✅ | [`INSERT` with a watermark filter → incremental + `is_incremental()`](B-write-patterns/B6-watermark-filter.md) | M | SRC | B5 |
+| **B7** ✅ | [Watermark held in a separate state table → replacing it with `{{ this }}`](B-write-patterns/B7-external-watermark.md) | M | CRAFT | B6 |
 | **B8** ✅ | [Hand-written `MERGE`: the `ON` clause → `unique_key`](B-write-patterns/B8-merge-on-clause-to-unique-key.md) | M | SRC | — |
-| B9 | Hand-written `MERGE`: `WHEN MATCHED THEN UPDATE` → `merge_update_columns` / `merge_exclude_columns` | M | SRC | B8 |
-| B10 | Hand-written `MERGE`: `WHEN NOT MATCHED BY SOURCE THEN DELETE` → the case dbt's `merge` cannot express | M | SRC | B8 |
-| B11 | Hand-written `MERGE`: conditional `WHEN MATCHED AND ...` clauses | M | SRC | B9 |
-| B12 | Hand-written `MERGE`: extra `ON` predicates → `incremental_predicates` | M | SRC | B8 |
+| **B9** ✅ | [Hand-written `MERGE`: `WHEN MATCHED THEN UPDATE` → `merge_update_columns` / `merge_exclude_columns`](B-write-patterns/B9-when-matched-update.md) | M | SRC | B8 |
+| **B10** ✅ | [Hand-written `MERGE`: `WHEN NOT MATCHED BY SOURCE THEN DELETE` → the case dbt's `merge` cannot express](B-write-patterns/B10-not-matched-by-source.md) | M | SRC | B8 |
+| **B11** ✅ | [Hand-written `MERGE`: conditional `WHEN MATCHED AND ...` clauses](B-write-patterns/B11-conditional-when-matched.md) | M | SRC | B9 |
+| **B12** ✅ | [Hand-written `MERGE`: extra `ON` predicates → `incremental_predicates`](B-write-patterns/B12-extra-predicates.md) | M | SRC | B8 |
 | **B13** ✅ | [`DELETE` + `INSERT` over a date range → `insert_overwrite`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) | M | SRC | — |
 | **B14** ✅ | [`DELETE` + `INSERT` where the range can legitimately empty → **the behaviour change**](B-write-patterns/B14-when-the-range-can-empty.md) | M | SRC | B13 |
-| B15 | `TRUNCATE` + `INSERT` → `table`, or `insert_overwrite` when partitioned | S | SRC | B13 |
-| B16 | Deduplication scripts (`QUALIFY ROW_NUMBER()`) → where dedup belongs after conversion | M | CRAFT | B8 |
+| **B15** ✅ | [`TRUNCATE` + `INSERT` → `table`, or `insert_overwrite` when partitioned](B-write-patterns/B15-truncate-insert.md) | S | SRC | B13 |
+| **B16** ✅ | [Deduplication scripts (`QUALIFY ROW_NUMBER()`) → where dedup belongs after conversion](B-write-patterns/B16-deduplication.md) | M | CRAFT | B8 |
 
 **B14 is the most important unit in the track.** A `DELETE`+`INSERT` script
 genuinely empties its range; the naive `insert_overwrite` conversion does not,
@@ -156,13 +156,13 @@ can link instead of repeating.
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
 | **E1** ✅ | [**One statement per model** — the constraint everything follows from](E-translation/E1-one-statement-per-model.md) | S | SRC | — |
-| E2 | Ordering by `ref()` instead of by line number | M | CORE | E1 |
-| E3 | `ref` vs `source`, and never both for the same object | S | CORE | E2 |
-| E4 | Cross-project and cross-dataset references | S | CRAFT | E3 |
-| E5 | Finding every hardcoded table name | S | CRAFT | E3 |
-| E6 | Hardcoded dates and manual backfill parameters | S | CRAFT | G3 |
-| E7 | Idempotency: what it means for a converted model | M | CRAFT | — |
-| E8 | Idempotency: proving it | M | CRAFT | E7, H2 |
+| **E2** ✅ | [Ordering by `ref()` instead of by line number](E-translation/E2-ordering-by-ref.md) | M | CORE | E1 |
+| **E3** ✅ | [`ref` vs `source`, and never both for the same object](E-translation/E3-ref-vs-source.md) | S | CORE | E2 |
+| **E4** ✅ | [Cross-project and cross-dataset references](E-translation/E4-cross-project-references.md) | S | CRAFT | E3 |
+| **E5** ✅ | [Finding every hardcoded table name](E-translation/E5-finding-hardcoded-names.md) | S | CRAFT | E3 |
+| **E6** ✅ | [Hardcoded dates and manual backfill parameters](E-translation/E6-hardcoded-dates.md) | S | CRAFT | G3 |
+| **E7** ✅ | [Idempotency: what it means for a converted model](E-translation/E7-idempotency-meaning.md) | M | CRAFT | — |
+| **E8** ✅ | [Idempotency: proving it](E-translation/E8-idempotency-proving.md) | M | CRAFT | E7, H2 |
 | E9 | Session settings that spanned statements | M | SRC | — |
 | E10 | System variables (`@@dataset_id`, `@@project_id`) | S | CRAFT | E9 |
 | E11 | Query parameters (`@param`) → vars | S | CORE | G3 |
@@ -361,8 +361,9 @@ Makes the track usable and covers the two highest-risk conversions end to end.
 [`H2`](H-verification/H2-row-count-parity.md) ✅ ·
 [`A9`](A-assess/A9-correctness-baseline.md) ✅
 
-**Wave 1 is complete.** The track now covers the two highest-risk conversions
-end to end, with assessment before and verification after. Wave 2 next.
+**Waves 1 and 2 are complete.** Every write-pattern archetype is documented,
+assessment and statement-level translation are done end to end. Wave 3 next:
+the rest of hooks, and verification.
 
 Rationale: E1 is the constraint everything references. A3 routes readers. B8 and
 B13 are the two conversions people actually arrive with. **B14 carries the
@@ -374,7 +375,10 @@ most common bad outcome. H2 makes the rest verifiable.
 All of Part B, the Part E units the archetype pages link into, and the rest of
 the assessment work.
 
-Remaining `B1`–`B16` (13) · `E2`–`E8` (7) · remaining Part A (6)
+Remaining `B1`–`B16` (13) · `E2`–`E8` (7) · remaining Part A (6) — **all written ✅**
+
+Part A and Part E are now complete. Part B is complete except `B8`, `B13` and
+`B14`, which shipped in wave 1 — so **the whole archetype catalogue is done**.
 
 ### Wave 3 — Hooks and verification (27 units)
 

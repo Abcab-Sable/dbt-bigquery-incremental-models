@@ -1,36 +1,76 @@
 # The conversion track
 
-**Status: wave 1 complete — 10 of 138 units written.**
+**Status: waves 1 and 2 complete — 36 of 138 units written.**
+
+Every write-pattern archetype is documented. Assessment and statement-level
+translation are complete end to end.
 
 ## Written so far
 
-Wave 1 covers the two highest-risk conversions end to end, with assessment
-before and verification after. Read in this order.
+### Assess — *complete*
 
-**Assess**
+| | |
+| --- | --- |
+| [A1](A-assess/A1-inventory.md) | Inventory your scripts |
+| [A2](A-assess/A2-map-dependencies.md) | Map declared dependencies against actual ones |
+| [A3](A-assess/A3-classify-by-write-pattern.md) | Classify by write pattern |
+| [A4](A-assess/A4-classify-by-trigger.md) | Classify by trigger |
+| [A5](A-assess/A5-hidden-state.md) | Find the hidden state |
+| [A6](A-assess/A6-compensating-hacks.md) | Find the compensating hacks |
+| [A7](A-assess/A7-what-not-to-convert.md) | Decide what **not** to convert |
+| [A8](A-assess/A8-estimate-risk.md) | Estimate conversion risk |
+| [A9](A-assess/A9-correctness-baseline.md) | Capture the correctness baseline |
 
-1. [A3 · Classify by write pattern](A-assess/A3-classify-by-write-pattern.md) — which conversion applies
-2. [A7 · Decide what not to convert](A-assess/A7-what-not-to-convert.md) — the counterweight
-3. [A9 · Capture the correctness baseline](A-assess/A9-correctness-baseline.md) — before you touch anything
+### Translate — *complete*
 
-**Translate**
+| | |
+| --- | --- |
+| [E1](E-translation/E1-one-statement-per-model.md) | **One statement per model** — start here |
+| [E2](E-translation/E2-ordering-by-ref.md) | Ordering by `ref()` instead of line number |
+| [E3](E-translation/E3-ref-vs-source.md) | `ref` vs `source`, and never both |
+| [E4](E-translation/E4-cross-project-references.md) | Cross-project and cross-dataset references |
+| [E5](E-translation/E5-finding-hardcoded-names.md) | Finding every hardcoded table name |
+| [E6](E-translation/E6-hardcoded-dates.md) | Hardcoded dates and backfill parameters |
+| [E7](E-translation/E7-idempotency-meaning.md) | Idempotency: what it means |
+| [E8](E-translation/E8-idempotency-proving.md) | Idempotency: proving it |
 
-4. [E1 · One statement per model](E-translation/E1-one-statement-per-model.md) — the constraint everything follows from
-5. [B8 · The `MERGE` `ON` clause → `unique_key`](B-write-patterns/B8-merge-on-clause-to-unique-key.md)
-6. [B13 · `DELETE` + `INSERT` → `insert_overwrite`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md)
-7. [B14 · When the range can legitimately empty](B-write-patterns/B14-when-the-range-can-empty.md) — **the one that matters**
+### Write-pattern archetypes — *complete*
 
-**Hooks**
+| | |
+| --- | --- |
+| [B1](B-write-patterns/B1-create-or-replace-to-table.md) | `CREATE OR REPLACE TABLE` → `table` |
+| [B2](B-write-patterns/B2-create-if-not-exists.md) | `CREATE TABLE IF NOT EXISTS` bootstrap |
+| [B3](B-write-patterns/B3-create-view.md) | `CREATE VIEW` → `view` |
+| [B4](B-write-patterns/B4-materialized-views.md) | Materialized views |
+| [B5](B-write-patterns/B5-unfiltered-insert.md) | Unfiltered `INSERT INTO ... SELECT` |
+| [B6](B-write-patterns/B6-watermark-filter.md) | `INSERT` with a watermark filter |
+| [B7](B-write-patterns/B7-external-watermark.md) | Watermark in a separate state table |
+| [B8](B-write-patterns/B8-merge-on-clause-to-unique-key.md) | `MERGE`: `ON` clause → `unique_key` |
+| [B9](B-write-patterns/B9-when-matched-update.md) | `MERGE`: `WHEN MATCHED THEN UPDATE` |
+| [B10](B-write-patterns/B10-not-matched-by-source.md) | `MERGE`: `WHEN NOT MATCHED BY SOURCE THEN DELETE` |
+| [B11](B-write-patterns/B11-conditional-when-matched.md) | `MERGE`: conditional `WHEN MATCHED AND ...` |
+| [B12](B-write-patterns/B12-extra-predicates.md) | `MERGE`: extra `ON` predicates |
+| [B13](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) | `DELETE` + `INSERT` → `insert_overwrite` |
+| [B14](B-write-patterns/B14-when-the-range-can-empty.md) | **When the range can legitimately empty** |
+| [B15](B-write-patterns/B15-truncate-insert.md) | `TRUNCATE` + `INSERT` |
+| [B16](B-write-patterns/B16-deduplication.md) | Deduplication scripts |
 
-8. [F17 · When a hook is the wrong answer](F-hooks/F17-when-a-hook-is-wrong.md)
-9. [F4 · Exactly where hooks run](F-hooks/F4-where-hooks-run.md)
+### Hooks and verification — *partial*
 
-**Verify**
+| | |
+| --- | --- |
+| [F4](F-hooks/F4-where-hooks-run.md) | Exactly where hooks run |
+| [F17](F-hooks/F17-when-a-hook-is-wrong.md) | When a hook is the wrong answer |
+| [H2](H-verification/H2-row-count-parity.md) | Row-count parity |
 
-10. [H2 · Row-count parity](H-verification/H2-row-count-parity.md)
+## Where to start
 
-New here? Read **E1**, then **A3**, then whichever of B8 / B13 matches your
-script. If it's B13, **B14 is not optional.**
+Read [E1](E-translation/E1-one-statement-per-model.md), then
+[A3](A-assess/A3-classify-by-write-pattern.md) to find your archetype, then the
+matching Part B page.
+
+If your script is a `DELETE`+`INSERT`, **[B14](B-write-patterns/B14-when-the-range-can-empty.md)
+is not optional** — the obvious conversion is silently wrong.
 
 The rest of the map follows.
 
