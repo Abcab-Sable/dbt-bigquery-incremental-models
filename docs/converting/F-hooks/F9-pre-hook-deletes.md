@@ -42,7 +42,7 @@ believes it owns this relation. A pre-hook modifying it is invisible to the
 materialization's logic, to `on_schema_change`, and to anyone reading the model.
 
 **4. It defeats the point of converting.** You've kept the script's structure and
-gained only the file location. That's [K5](../BACKLOG.md#part-k--anti-patterns).
+gained only the file location. That's [K5](../K-antipatterns/K5-imperative-jinja.md).
 
 ## The right version
 

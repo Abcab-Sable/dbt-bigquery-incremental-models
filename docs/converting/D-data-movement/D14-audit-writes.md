@@ -77,7 +77,7 @@ where creation_time > timestamp_sub(current_timestamp(), interval 90 day)
 group by 1 order by n desc;
 ```
 
-Then strangle it ([I2](../BACKLOG.md#part-i--migration-strategy)):
+Then strangle it ([I2](../I-migration/I2-strangler-pattern.md)):
 
 1. Keep the existing write, ported as-is to `on-run-end`
 2. Start loading `run_results.json` into a new table alongside

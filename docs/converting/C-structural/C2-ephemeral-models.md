@@ -94,7 +94,7 @@ results.**
 
 One level is fine. Two is tolerable. Beyond that the compiled SQL becomes
 unreadable and the cost multiplication gets hard to reason about. That's
-[K9](../BACKLOG.md#part-k--anti-patterns).
+[K9](../K-antipatterns/K9-ephemeral-overuse.md).
 
 If a script had a five-deep temp table chain, that's usually a sign the pipeline
 wants real intermediate tables — [C3](C3-separate-models.md).

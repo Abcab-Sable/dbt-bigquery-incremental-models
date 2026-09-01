@@ -112,7 +112,7 @@ as a `source` for everything still calling the old procedures
 
 Then the next leaf. The parent procedure shrinks until it's empty, and you delete
 it. That's the strangler pattern —
-[I2](../BACKLOG.md#part-i--migration-strategy) — and it's the only sane way to
+[I2](../I-migration/I2-strangler-pattern.md) — and it's the only sane way to
 handle a deep call tree.
 
 ---

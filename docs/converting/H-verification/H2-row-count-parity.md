@@ -5,7 +5,7 @@
 
 Row counts. Weak evidence, near-zero cost, and they catch the failure modes this
 track is actually about. Start here, then move to
-[H3](../BACKLOG.md#part-h--proving-correctness) for content parity.
+[H3](../H-verification/H3-checksum-parity.md) for content parity.
 
 ## Total count first
 
@@ -101,12 +101,12 @@ query and it catches the single most common conversion bug.
 Be clear with yourself about the limits:
 
 - **Nothing about column values.** Every count can match with every `amount`
-  wrong. That's [H3](../BACKLOG.md#part-h--proving-correctness) and
-  [H4](../BACKLOG.md#part-h--proving-correctness).
+  wrong. That's [H3](../H-verification/H3-checksum-parity.md) and
+  [H4](../H-verification/H4-column-level-diffing.md).
 - **Nothing about the periods you didn't test.** One good day is one good day.
 - **Nothing about late-arriving data**, which by definition hasn't arrived.
 - **Nothing about the future.** Parity today is not a standing guarantee, which
-  is why [J3](../BACKLOG.md#part-j--operating-it-afterwards) exists.
+  is why [J3](../J-operating/J3-scheduled-reconciliation.md) exists.
 
 Row-count parity is the check that tells you whether it's worth doing the
 expensive checks. Passing it is permission to continue, not a result.
@@ -115,7 +115,7 @@ expensive checks. Passing it is permission to continue, not a result.
 
 - After the first successful build of the converted model
 - After changing strategy, `unique_key`, or `partition_by`
-- Every day of shadow running ([H5](../BACKLOG.md#part-h--proving-correctness))
+- Every day of shadow running ([H5](../H-verification/H5-shadow-mode.md))
 - Once more immediately before retiring the script
 
 ---

@@ -63,12 +63,12 @@ Rare, but real:
 
 **Clustering.** Physical ordering affects query cost, not correctness. If the old
 table was clustered and your model isn't, results match while performance
-doesn't. That's a config difference — [D6](../BACKLOG.md#part-d--data-movement-ddl-and-metadata) —
+doesn't. That's a config difference — [D6](../D-data-movement/D6-partitioning-ddl.md) —
 and it won't show up in any parity check. Check it separately.
 
 **A downstream consumer relying on order without `ORDER BY`.** They have a latent
 bug. Your conversion may expose it. Worth a warning during cutover
-([I5](../BACKLOG.md#part-i--migration-strategy)) even though it isn't your bug.
+([I5](../I-migration/I5-notifying-consumers.md)) even though it isn't your bug.
 
 **Non-deterministic tiebreaks.** If a `QUALIFY ROW_NUMBER()` orders by a
 non-unique column, *which* row survives varies between runs. That isn't an

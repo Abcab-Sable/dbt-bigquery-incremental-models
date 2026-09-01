@@ -5,7 +5,7 @@
 
 The most common script shape in analytics, and the conversion with the most
 dangerous edge. This page does the mapping. **Read
-[B14](../BACKLOG.md#part-b--write-pattern-archetypes) immediately afterwards** —
+[B14](../B-write-patterns/B14-when-the-range-can-empty.md) immediately afterwards** —
 the naive version of this conversion is silently wrong in a way your script was
 not.
 
@@ -63,7 +63,7 @@ you declare what a partition should contain, and dbt clears it before writing.
 | `DELETE FROM ... WHERE event_date >= X` | **gone** — implied by the strategy |
 | the `INSERT`'s `SELECT` | the model body |
 | `WHERE event_date >= X` in the `SELECT` | the `is_incremental()` block |
-| `DECLARE start_date ...` | inline, or a var ([E6](../BACKLOG.md#part-e--statement-level-translation)) |
+| `DECLARE start_date ...` | inline, or a var ([E6](../E-translation/E6-hardcoded-dates.md)) |
 | the column the `DELETE` filters on | **`partition_by.field`** |
 
 That last row is the one to get right. **The column your `DELETE` filtered on is
@@ -135,7 +135,7 @@ independent of the data.
 model produced.** It's derived from output, not declared.
 
 When your model produces rows for all three days, those are equivalent. When it
-doesn't, they are not — and that is [B14](../BACKLOG.md#part-b--write-pattern-archetypes).
+doesn't, they are not — and that is [B14](../B-write-patterns/B14-when-the-range-can-empty.md).
 
 ## Static partitions: closer to what your script did
 
@@ -162,14 +162,14 @@ so `current_date()` works but a fixed date needs its own quotes (`'2026-08-31'`)
 And never build this list from untrusted input; there is no escaping.
 
 **If your script's range could ever be empty, use this form.** That decision is
-[B14](../BACKLOG.md#part-b--write-pattern-archetypes), and it's not optional.
+[B14](../B-write-patterns/B14-when-the-range-can-empty.md), and it's not optional.
 
 ## Before you retire the script
 
 - [ ] Target table is partitioned on the delete column, at matching granularity
 - [ ] `dbt compile` output shows the partition predicate you expect
 - [ ] You've decided static vs dynamic, deliberately, having read B14
-- [ ] Row counts match for a range both versions have processed ([H2](../BACKLOG.md#part-h--proving-correctness))
+- [ ] Row counts match for a range both versions have processed ([H2](../H-verification/H2-row-count-parity.md))
 - [ ] You've tested a range that produces **zero rows**, and confirmed the result
       is what you want
 

@@ -75,7 +75,7 @@ Size the window to how late your data actually arrives, and write down why:
 ```
 
 That comment is the difference between a decision and folklore —
-[G8](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+[G8](../G-scheduling/G8-late-arriving-data.md).
 
 ## Cost: the filter isn't the whole story
 

@@ -55,7 +55,7 @@ attached to a model is the script you were converting away from —
 
 Two or three independent statements (description, labels, expiration) is fine.
 A five-step sequence where each depends on the last is
-[K2](../BACKLOG.md#part-k--anti-patterns).
+[K2](../K-antipatterns/K2-hooks-as-escape-hatch.md).
 
 ## Prefer a macro for anything ordered
 

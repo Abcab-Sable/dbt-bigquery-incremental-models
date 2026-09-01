@@ -63,7 +63,7 @@ but **before** three things:
 
 | Runs after post-hooks | So a post-hook… |
 | --- | --- |
-| `apply_grants` | cannot assume grants are applied — see [F11](../BACKLOG.md#part-f--hooks) |
+| `apply_grants` | cannot assume grants are applied — see [F11](../F-hooks/F11-grants-vs-post-hook.md) |
 | `persist_docs` | cannot assume descriptions are on the relation |
 | `drop_relation(tmp_relation)` | **can still see the temp table**, if one existed |
 

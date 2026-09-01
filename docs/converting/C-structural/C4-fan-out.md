@@ -91,7 +91,7 @@ single `dbt build --select` covering all four with failure handling in your
 orchestrator, or accepting partial success as the new behaviour.
 
 Record the decision — it's exactly the kind of thing
-[G11](../BACKLOG.md#part-g--scheduling-parameters-backfills) covers, and exactly
+[G11](../G-scheduling/G11-retry-and-failure.md) covers, and exactly
 the kind nobody notices until an incident.
 
 ---

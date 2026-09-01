@@ -74,7 +74,7 @@ readers can't either.
 
 Resist renaming the CTEs during conversion. Someone will diff your model against
 the script, and matching names make that a five-minute job instead of an hour.
-Tidy afterwards, separately — [K11](../BACKLOG.md#part-k--anti-patterns).
+Tidy afterwards, separately — [K11](../K-antipatterns/K11-convert-and-optimise.md).
 
 ## `CREATE TEMP TABLE` vs `WITH` isn't semantically neutral
 

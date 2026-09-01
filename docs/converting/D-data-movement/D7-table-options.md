@@ -100,7 +100,7 @@ so is dropping a deliberate one.
 
 If the script set `partition_expiration_days` and you miss it, partitions stop
 being cleaned up and storage grows quietly. That won't show up in any parity
-check — it's [J8](../BACKLOG.md#part-j--operating-it-afterwards) territory.
+check — it's [J8](../J-operating/J8-partition-growth.md) territory.
 
 ## Record what you deliberately dropped
 

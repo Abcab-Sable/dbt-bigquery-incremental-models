@@ -108,7 +108,7 @@ five years.
 4. Delete the hook.
 
 That's the strangler pattern applied to a hook —
-[I2](../BACKLOG.md#part-i--migration-strategy) — and it's the right shape here
+[I2](../I-migration/I2-strangler-pattern.md) — and it's the right shape here
 because the audit table's readers are usually dashboards nobody wants to break
 during a conversion.
 

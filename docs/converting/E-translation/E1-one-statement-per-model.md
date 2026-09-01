@@ -66,13 +66,13 @@ different hat:
 
 | Your script does | Why it doesn't fit | Where it goes |
 | --- | --- | --- |
-| Several statements in order | One `select` per model | [C1](../BACKLOG.md#part-c--structural-archetypes) CTEs, [C2](../BACKLOG.md#part-c--structural-archetypes) ephemeral, or [C3](../BACKLOG.md#part-c--structural-archetypes) separate models |
+| Several statements in order | One `select` per model | [C1](../C-structural/C1-multi-statement-to-ctes.md) CTEs, [C2](../C-structural/C2-ephemeral-models.md) ephemeral, or [C3](../C-structural/C3-separate-models.md) separate models |
 | Creates a temp table midway | You don't manage storage | A CTE, or its own model |
-| Runs A then B because B needs A | Order isn't yours to state | `ref()` — [E2](../BACKLOG.md#part-e--statement-level-translation) |
-| `DECLARE`s a variable | No statement to hold it | vars or macros — [C5](../BACKLOG.md#part-c--structural-archetypes) |
-| Writes to two tables | One model, one relation | Two models — [C4](../BACKLOG.md#part-c--structural-archetypes) |
-| Grants, exports, notifies | Not part of a definition | Hooks — [Part F](../BACKLOG.md#part-f--hooks) |
-| Loops | Nothing to loop over | Usually set-based logic — [C7](../BACKLOG.md#part-c--structural-archetypes) |
+| Runs A then B because B needs A | Order isn't yours to state | `ref()` — [E2](../E-translation/E2-ordering-by-ref.md) |
+| `DECLARE`s a variable | No statement to hold it | vars or macros — [C5](../C-structural/C5-declare-set-variables.md) |
+| Writes to two tables | One model, one relation | Two models — [C4](../C-structural/C4-fan-out.md) |
+| Grants, exports, notifies | Not part of a definition | Hooks — [Part F](../README.md#hooks--complete) |
+| Loops | Nothing to loop over | Usually set-based logic — [C7](../C-structural/C7-loops.md) |
 
 ## The three legitimate exits
 
@@ -83,10 +83,10 @@ places for it, in order of preference:
    If a step produces a meaningful intermediate result, it wants a name.
 2. **A hook.** For side effects that belong to the model but aren't part of its
    definition — grants, table options, audit rows. Genuinely easy to abuse;
-   [F17](../BACKLOG.md#part-f--hooks) is about when not to.
+   [F17](../F-hooks/F17-when-a-hook-is-wrong.md) is about when not to.
 3. **A `run-operation`.** For work that isn't a model at all — one-off
    maintenance, admin DDL. Not a scheduler; see
-   [K4](../BACKLOG.md#part-k--anti-patterns).
+   [K4](../K-antipatterns/K4-run-operation-as-scheduler.md).
 
 If your answer is "none of these", the honest conclusion is often that this
 particular script shouldn't be a dbt model. That's [A7](../A-assess/A7-what-not-to-convert.md).

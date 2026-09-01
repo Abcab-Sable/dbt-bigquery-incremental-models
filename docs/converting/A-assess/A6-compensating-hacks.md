@@ -9,7 +9,7 @@ can justify. Each was a rational response to a real problem, and none of it is
 documented.
 
 Port them literally and you carry the bug forward with a clean face on it. That's
-[K6](../BACKLOG.md#part-k--anti-patterns), and conversion is the one moment
+[K6](../K-antipatterns/K6-porting-the-bug.md), and conversion is the one moment
 you're guaranteed to be reading the code closely enough to catch it.
 
 ## The signatures
@@ -20,7 +20,7 @@ own non-idempotency. If the script appends without a key and someone re-ran it
 once, the dedup is the scar.
 
 Ask: *if I removed this, would there be duplicates?* If yes, find out where they
-come from. That's the actual bug, and [B16](../BACKLOG.md#part-b--write-pattern-archetypes)
+come from. That's the actual bug, and [B16](../B-write-patterns/B16-deduplication.md)
 covers where dedup belongs afterwards.
 
 **A `DELETE` that isn't part of the write pattern.** A delete-insert has a delete
@@ -47,7 +47,7 @@ simply not exist any more — but verify rather than assume.
 
 **Widened date ranges.** `interval 7 day` where the schedule is daily. Usually
 compensating for late-arriving data, which is legitimate — but it should be a
-documented decision, not folklore. See [G8](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+documented decision, not folklore. See [G8](../G-scheduling/G8-late-arriving-data.md).
 
 ## The triage
 
@@ -64,11 +64,11 @@ where vendor_id != 447
 
 **Still needed, but compensating for something fixable** ⇒ port it now, open a
 ticket, note it in the model. Don't fix upstream data quality in the same change
-as a conversion — that's [K11](../BACKLOG.md#part-k--anti-patterns) and it makes
+as a conversion — that's [K11](../K-antipatterns/K11-convert-and-optimise.md) and it makes
 failures impossible to attribute.
 
 **No longer needed** ⇒ drop it, and expect a diff. This is the case that makes
-[H11](../BACKLOG.md#part-h--proving-correctness) necessary: your new output will
+[H11](../H-verification/H11-differences-that-should-exist.md) necessary: your new output will
 legitimately differ from the old, and you need to be able to say why before
 someone flags it as a conversion bug.
 

@@ -57,7 +57,7 @@ it is not the same as running it.
 Stopping it isn't retiring it. In order:
 
 **1. Disable, don't delete.** Turn off the schedule. Leave the script in place and
-runnable for the rollback window — [I6](../BACKLOG.md#part-i--migration-strategy).
+runnable for the rollback window — [I6](../I-migration/I6-rollback-keeping-script.md).
 
 **2. Confirm it's actually stopped.** Two writers to one table is worse than
 either alone:
@@ -76,7 +76,7 @@ Only the dbt service account should appear. Anything else is still running.
 reporting cycle, whatever your calendar demands.
 
 **4. Then delete**, and take the baseline artefacts with it —
-[I8](../BACKLOG.md#part-i--migration-strategy). Keep the baseline document; it
+[I8](../I-migration/I8-decommissioning.md). Keep the baseline document; it
 explains why the model looks the way it does.
 
 **5. Remove the source declaration.** If downstream models pointed at the script's
@@ -104,7 +104,7 @@ Sign-off ends the conversion. It doesn't end the risk — every silent failure i
 this documentation shows up *after* cutover, not during it.
 
 The standing control is a scheduled full-refresh reconciliation:
-[J3](../BACKLOG.md#part-j--operating-it-afterwards). Set it up as part of the
+[J3](../J-operating/J3-scheduled-reconciliation.md). Set it up as part of the
 conversion, while you still remember what correct looked like.
 
 ---

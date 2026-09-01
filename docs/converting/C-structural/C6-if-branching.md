@@ -93,7 +93,7 @@ See [H12](../H-verification/H12-tests-from-guarantees.md).
 **3. Move it to the orchestrator.** If the branch decides *whether to run at
 all*, that's a scheduling decision. Your orchestrator checks the condition and
 invokes dbt or doesn't. Don't simulate it inside a model —
-[K5](../BACKLOG.md#part-k--anti-patterns).
+[K5](../K-antipatterns/K5-imperative-jinja.md).
 
 ## `run_query` is the tempting wrong answer
 

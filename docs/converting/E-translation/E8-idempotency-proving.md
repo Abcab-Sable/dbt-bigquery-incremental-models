@@ -111,7 +111,7 @@ won't reproduce.
 
 That's a legitimate difference, not a conversion bug — but only if you knew about
 it in advance. It goes in [A9](../A-assess/A9-correctness-baseline.md), and it's
-exactly the case [H11](../BACKLOG.md#part-h--proving-correctness) exists for.
+exactly the case [H11](../H-verification/H11-differences-that-should-exist.md) exists for.
 
 ## Put it in CI
 

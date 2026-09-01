@@ -88,7 +88,7 @@ inherited.
 
 **Fix it** — nulls where nulls are meant. But that's a deliberate behaviour
 change: predict it, record it in [H11](H11-differences-that-should-exist.md), and
-tell downstream consumers ([I5](../BACKLOG.md#part-i--migration-strategy)).
+tell downstream consumers ([I5](../I-migration/I5-notifying-consumers.md)).
 
 What you must not do is notice the difference, decide it's cosmetic, and move on.
 

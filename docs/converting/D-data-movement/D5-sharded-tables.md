@@ -79,7 +79,7 @@ Each batch handles one day, retryable independently —
 [the microbatch page](../../balanced/05-microbatch.md).
 
 **Manual ranges**, running `--vars` over chunks —
-[G7](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+[G7](../G-scheduling/G7-backfill-partition-ranges.md).
 
 ## Handle the schema drift
 
@@ -109,7 +109,7 @@ The consolidated table is a new thing. Keep the shards until:
   [H3](../H-verification/H3-checksum-parity.md))
 - every consumer of the wildcard has moved
 - the rollback window has passed —
-  [I6](../BACKLOG.md#part-i--migration-strategy)
+  [I6](../I-migration/I6-rollback-keeping-script.md)
 
 Then delete them, and enjoy the dataset listing.
 
@@ -122,7 +122,7 @@ shards each run. The shards become an implementation detail of ingestion, and
 everything in your project reads the partitioned table.
 
 Changing the loader is a separate piece of work — and not one to do during a
-conversion ([K11](../BACKLOG.md#part-k--anti-patterns)).
+conversion ([K11](../K-antipatterns/K11-convert-and-optimise.md)).
 
 ---
 

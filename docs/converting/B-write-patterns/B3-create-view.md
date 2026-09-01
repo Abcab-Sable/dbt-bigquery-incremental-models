@@ -54,7 +54,7 @@ it, `ephemeral` removes the object entirely and inlines it as a CTE:
 Fewer objects, no stale intermediate. But it disappears from the warehouse, so
 anything querying it directly breaks — check first with
 [A2](../A-assess/A2-map-dependencies.md). More in
-[C2](../BACKLOG.md#part-c--structural-archetypes).
+[C2](../C-structural/C2-ephemeral-models.md).
 
 ## The view-to-table trap
 
@@ -69,14 +69,14 @@ the view first**. There's no atomic view-to-table replacement on BigQuery:
 
 Between the drop and the create, the relation does not exist. Anything querying
 it at that moment fails. Schedule the change accordingly, and tell whoever reads
-it — [I5](../BACKLOG.md#part-i--migration-strategy).
+it — [I5](../I-migration/I5-notifying-consumers.md).
 
 ## Authorized views
 
 If the view exists to grant access to a subset of a table without granting the
 table, that's an authorized view, and the authorization is a **grant**, not part
 of the view definition. Converting the view without carrying the authorization
-breaks access silently — [D10](../BACKLOG.md#part-d--data-movement-ddl-and-metadata).
+breaks access silently — [D10](../D-data-movement/D10-grants-authorized-views.md).
 
 ---
 

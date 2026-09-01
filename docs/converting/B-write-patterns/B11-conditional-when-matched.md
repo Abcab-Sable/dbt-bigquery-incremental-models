@@ -97,7 +97,7 @@ corrupted a table.
 If the source is now ordered, or the pipeline that caused it is gone, the
 condition may be dead. Don't remove it during the conversion — port it, note it,
 and test removing it afterwards as a separate change
-([K11](../BACKLOG.md#part-k--anti-patterns)).
+([K11](../K-antipatterns/K11-convert-and-optimise.md)).
 
 ## Verify the behaviour, not the row count
 

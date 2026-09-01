@@ -82,8 +82,8 @@ reference but pointed it at the wrong model.
 
 | Pattern | Why it hides |
 | --- | --- |
-| `EXECUTE IMMEDIATE` with a built name | The name doesn't exist as text — [C10](../BACKLOG.md#part-c--structural-archetypes) |
-| Wildcards (`events_*`) | Not a single table — [D4](../BACKLOG.md#part-d--data-movement-ddl-and-metadata) |
+| `EXECUTE IMMEDIATE` with a built name | The name doesn't exist as text — [C10](../C-structural/C10-dynamic-sql.md) |
+| Wildcards (`events_*`) | Not a single table — [D4](../D-data-movement/D4-wildcard-tables.md) |
 | Reads through a view | The view is the dependency; what it reads is invisible |
 | Names inside a macro | Grep `macros/` too |
 | Names in a hook | Hooks are SQL and can hardcode. Grep configs as well |

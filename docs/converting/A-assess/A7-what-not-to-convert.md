@@ -47,11 +47,11 @@ project — but don't make it incremental.
 **Its logic is genuinely procedural.** Loops with real dependencies between
 iterations, recursive processing, statefulness that isn't expressible as a set
 operation. You can force these into Jinja. The result is
-[K5](../BACKLOG.md#part-k--anti-patterns), and it's worse than the script was.
+[K5](../K-antipatterns/K5-imperative-jinja.md), and it's worse than the script was.
 
 **Nobody knows what it does and it isn't breaking.** Harsh but practical. Without
 someone who can say what correct output looks like, you cannot do
-[Part H](../BACKLOG.md#part-h--proving-correctness), which means you cannot know
+[Part H](../README.md#scheduling-parameters-backfills--complete), which means you cannot know
 whether your conversion worked. Find the owner first, or leave it.
 
 ## Convert it if
@@ -79,7 +79,7 @@ and the notification where they are.
 
 **Convert to `table` first, incremental later.** Two separate changes with two
 separate risk profiles. Doing them together makes a failure hard to attribute —
-[K11](../BACKLOG.md#part-k--anti-patterns).
+[K11](../K-antipatterns/K11-convert-and-optimise.md).
 
 ## Write down what you skipped
 

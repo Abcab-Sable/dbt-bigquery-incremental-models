@@ -115,7 +115,7 @@ exposures:
 
 That's the thing that stops someone changing the model's columns without
 realising a partner receives them — and it's exactly what
-[I5](../BACKLOG.md#part-i--migration-strategy) needs at cutover.
+[I5](../I-migration/I5-notifying-consumers.md) needs at cutover.
 
 ---
 

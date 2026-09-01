@@ -80,7 +80,7 @@ some of it later.
 
 The opposite failure is one model per script statement, including the trivial
 ones. A `SELECT` that filters two rows doesn't need a name, a file, and a table.
-That's [K8](../BACKLOG.md#part-k--anti-patterns).
+That's [K8](../K-antipatterns/K8-one-model-per-statement.md).
 
 Ask what each step *is*, not just that it exists.
 

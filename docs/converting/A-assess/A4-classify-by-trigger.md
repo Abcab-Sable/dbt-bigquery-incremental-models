@@ -12,7 +12,7 @@ dbt.
 
 | Trigger | Signature | Converts how |
 | --- | --- | --- |
-| **Scheduled** | cron, scheduled query, DAG timer | Directly — [G1](../BACKLOG.md#part-g--scheduling-parameters-backfills) |
+| **Scheduled** | cron, scheduled query, DAG timer | Directly — [G1](../G-scheduling/G1-cron-to-dbt-build.md) |
 | **Chained** | runs after another job succeeds | Becomes a `ref()` edge — [E2](../E-translation/E2-ordering-by-ref.md) |
 | **Event-driven** | file lands, message arrives, webhook | **Stays outside.** dbt has no trigger model |
 | **Manual** | someone runs it | Depends entirely on why |
@@ -47,7 +47,7 @@ That's fine — it just means the trigger stays where it is and calls `dbt build
 the trigger doesn't.
 
 Don't try to simulate this by polling inside a model. That's a scheduler written
-in SQL, and it's [K4](../BACKLOG.md#part-k--anti-patterns).
+in SQL, and it's [K4](../K-antipatterns/K4-run-operation-as-scheduler.md).
 
 ## Manual
 
@@ -58,7 +58,7 @@ Ask why, because the answer determines everything:
 - **"After the finance team confirms"** ⇒ a genuine human gate. Keep the gate,
   convert the transformation.
 - **"When we're backfilling"** ⇒ not a trigger, a mode. Becomes
-  [G5–G7](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+  [G5–G7](../G-scheduling/G5-backfill-full-refresh.md).
 - **"It was a one-off, it just never got deleted"** ⇒ don't convert it. Delete
   it, or leave it — [A7](A7-what-not-to-convert.md).
 
@@ -74,7 +74,7 @@ guessed.
 
 That consolidation is often the single largest operational win of a migration,
 and you can only see it once the inventory and the triggers are both written
-down. Details in [G2](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+down. Details in [G2](../G-scheduling/G2-consolidating-schedules.md).
 
 ---
 

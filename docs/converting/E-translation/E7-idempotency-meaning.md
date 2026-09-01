@@ -63,7 +63,7 @@ from ...
 
 The rows differ every run even when the input hasn't changed, which breaks both
 idempotency and any content-based parity check in
-[H3](../BACKLOG.md#part-h--proving-correctness). If you need a stable id, hash
+[H3](../H-verification/H3-checksum-parity.md). If you need a stable id, hash
 the business key instead:
 
 ```sql

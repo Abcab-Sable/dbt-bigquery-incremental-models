@@ -51,7 +51,7 @@ See [B13](../B-write-patterns/B13-delete-insert-to-insert-overwrite.md) and
 | --- | --- |
 | Always the same relative expression | Inline |
 | Edited by hand for backfills | A var |
-| Passed in by the scheduler | A var — [G3](../BACKLOG.md#part-g--scheduling-parameters-backfills) |
+| Passed in by the scheduler | A var — [G3](../G-scheduling/G3-passing-dates.md) |
 | A set of periods to replace | `partitions` |
 | A fixed historical literal (`'2019-01-01'`) | Inline, and ask why |
 
@@ -89,7 +89,7 @@ changes what you do:
 
 The opposite failure is turning every literal into a var "for flexibility". You
 get a model nobody can read and defaults nobody can find. That's
-[K7](../BACKLOG.md#part-k--anti-patterns).
+[K7](../K-antipatterns/K7-over-parameterising.md).
 
 Parameterise what someone actually changes. Everything else is a constant, and
 constants are clearer inline.

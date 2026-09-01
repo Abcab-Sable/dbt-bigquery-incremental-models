@@ -37,7 +37,7 @@ So before comparing, be explicit about which you want:
 | Equivalence — match the script exactly | Port compensating hacks as-is. Differences are conversion bugs |
 | Correctness — fix known problems too | Expect differences. You must be able to explain each — [H11](H11-differences-that-should-exist.md) |
 
-**Pick one.** Doing both at once is [K11](../BACKLOG.md#part-k--anti-patterns) and
+**Pick one.** Doing both at once is [K11](../K-antipatterns/K11-convert-and-optimise.md) and
 makes every diff ambiguous: you can't tell a bug from an intended fix.
 
 The default should be equivalence. Convert first, fix second, as two changes.
@@ -78,7 +78,7 @@ against it, and [H13](H13-sign-off.md) signs it off.
 ## What can't be proven this way
 
 - **Future behaviour.** Parity today says nothing about next month —
-  [J3](../BACKLOG.md#part-j--operating-it-afterwards) is the standing control.
+  [J3](../J-operating/J3-scheduled-reconciliation.md) is the standing control.
 - **Empty-period behaviour**, unless you force it. Normal data never contains the
   case — [B14](../B-write-patterns/B14-when-the-range-can-empty.md).
 - **Late-arriving data**, which by definition hasn't arrived.

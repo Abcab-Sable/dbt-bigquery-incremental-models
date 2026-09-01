@@ -105,7 +105,7 @@ with the cap raised deliberately, or set it after the model is established.
   [D7](../D-data-movement/D7-table-options.md)
 
 Query cost is what conversion changes most, so that's where the guard belongs.
-Track it afterwards — [J1](../BACKLOG.md#part-j--operating-it-afterwards).
+Track it afterwards — [J1](../J-operating/J1-cost-after-conversion.md).
 
 ---
 

@@ -203,7 +203,12 @@ not to do.
 
 ## Where to start
 
-Read [E1](E-translation/E1-one-statement-per-model.md), then
+**In a hurry, or converting a specific statement?** The
+[statement-pattern cheatsheet](CHEATSHEET.md) is the whole track compressed into
+one page: statement shape → strategy → config, `MERGE` clause by clause, and the
+edge cases ranked by how often they cost a day. Every row links back here.
+
+Otherwise: read [E1](E-translation/E1-one-statement-per-model.md), then
 [A3](A-assess/A3-classify-by-write-pattern.md) to find your archetype, then the
 matching Part B page.
 
@@ -271,17 +276,17 @@ reading. Pages will say which they are.
 
 | Part | Subject | Units |
 | --- | --- | --- |
-| **A** | [Assess before you convert](BACKLOG.md#part-a--assess-before-you-convert) | 9 |
-| **B** | [Write-pattern archetypes](BACKLOG.md#part-b--write-pattern-archetypes) | 16 |
-| **C** | [Structural archetypes](BACKLOG.md#part-c--structural-archetypes) | 14 |
-| **D** | [Data movement, DDL, metadata](BACKLOG.md#part-d--data-movement-ddl-and-metadata) | 14 |
-| **E** | [Statement-level translation](BACKLOG.md#part-e--statement-level-translation) | 13 |
-| **F** | [Hooks](BACKLOG.md#part-f--hooks) | 17 |
-| **G** | [Scheduling, parameters, backfills](BACKLOG.md#part-g--scheduling-parameters-backfills) | 11 |
-| **H** | [Proving correctness](BACKLOG.md#part-h--proving-correctness) | 13 |
-| **I** | [Migration strategy](BACKLOG.md#part-i--migration-strategy) | 10 |
-| **J** | [Operating it afterwards](BACKLOG.md#part-j--operating-it-afterwards) | 9 |
-| **K** | [Anti-patterns](BACKLOG.md#part-k--anti-patterns) | 12 |
+| **A** | [Assess before you convert](#assess--complete) | 9 |
+| **B** | [Write-pattern archetypes](#translate--complete) | 16 |
+| **C** | [Structural archetypes](#write-pattern-archetypes--complete) | 14 |
+| **D** | [Data movement, DDL, metadata](#structural-archetypes--complete) | 14 |
+| **E** | [Statement-level translation](#data-movement-ddl-metadata--complete) | 13 |
+| **F** | [Hooks](#hooks--complete) | 17 |
+| **G** | [Scheduling, parameters, backfills](#proving-correctness--complete) | 11 |
+| **H** | [Proving correctness](#scheduling-parameters-backfills--complete) | 13 |
+| **I** | [Migration strategy](#migration-strategy--complete) | 10 |
+| **J** | [Operating it afterwards](#operating-it-afterwards--complete) | 9 |
+| **K** | [Anti-patterns](#anti-patterns--complete) | 12 |
 
 **138 units total**, none larger than a single page — if a unit would need a long
 page, it is already split. Full breakdown with sizes, sourcing and dependencies
