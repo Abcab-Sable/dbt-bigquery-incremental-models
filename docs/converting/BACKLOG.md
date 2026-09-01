@@ -21,7 +21,7 @@ granularity rule, not an accident.
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
 **Status** — ✅ means written and linked. Everything else is `todo`.
-**96 of 138 done** — waves 1–4 complete. Parts A, B, C, D, E, F and H are finished.
+**138 of 138 done — the track is complete.** All eleven parts written.
 
 **Deps** — units that should be written first, because this one links to them.
 
@@ -228,17 +228,17 @@ work; this one explains why the answer is usually a model.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| G1 | From cron entries to `dbt build` | M | CRAFT | — |
-| G2 | Consolidating many schedules into one run | M | CRAFT | G1, E2 |
-| G3 | Passing dates in: `vars` and `--vars` | M | CORE | — |
-| G4 | Environment variables and secrets | S | CORE | G3 |
-| G5 | Backfill via `--full-refresh` | M | SRC | — |
-| G6 | Backfill via microbatch | M | CORE✓ | G5 |
-| G7 | Backfill via explicit partition ranges | M | SRC | G5, B13 |
-| G8 | Late-arriving data after conversion | M | CRAFT | B6 |
-| G9 | Selectors: `--select`, `--exclude` | S | CORE | — |
-| G10 | State-based selection and slim CI | M | CORE | G9 |
-| G11 | Retry and partial-failure semantics vs a half-completed script | M | CRAFT | — |
+| **G1** ✅ | [From cron entries to `dbt build`](G-scheduling/G1-cron-to-dbt-build.md) | M | CRAFT | — |
+| **G2** ✅ | [Consolidating many schedules into one run](G-scheduling/G2-consolidating-schedules.md) | M | CRAFT | G1, E2 |
+| **G3** ✅ | [Passing dates in: `vars` and `--vars`](G-scheduling/G3-passing-dates.md) | M | CORE | — |
+| **G4** ✅ | [Environment variables and secrets](G-scheduling/G4-env-vars-secrets.md) | S | CORE | G3 |
+| **G5** ✅ | [Backfill via `--full-refresh`](G-scheduling/G5-backfill-full-refresh.md) | M | SRC | — |
+| **G6** ✅ | [Backfill via microbatch](G-scheduling/G6-backfill-microbatch.md) | M | CORE✓ | G5 |
+| **G7** ✅ | [Backfill via explicit partition ranges](G-scheduling/G7-backfill-partition-ranges.md) | M | SRC | G5, B13 |
+| **G8** ✅ | [Late-arriving data after conversion](G-scheduling/G8-late-arriving-data.md) | M | CRAFT | B6 |
+| **G9** ✅ | [Selectors: `--select`, `--exclude`](G-scheduling/G9-selectors.md) | S | CORE | — |
+| **G10** ✅ | [State-based selection and slim CI](G-scheduling/G10-state-selection.md) | M | CORE | G9 |
+| **G11** ✅ | [Retry and partial-failure semantics vs a half-completed script](G-scheduling/G11-retry-and-failure.md) | M | CRAFT | — |
 
 G11 is underrated. A failed script often leaves partial writes; a failed dbt run
 has different guarantees per materialization. Conversion changes your failure
@@ -280,16 +280,16 @@ different, and you need to be able to say why.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| I1 | Conversion order: leaves first or roots first | M | CRAFT | A2 |
-| I2 | The strangler pattern for a script suite | M | CRAFT | I1 |
-| I3 | Converting one script while others still depend on its output | M | CRAFT | I2 |
-| I4 | Dual-write during cutover | M | CRAFT | H5 |
-| I5 | Telling downstream consumers | S | CRAFT | I4 |
-| I6 | Rollback: keeping the old script runnable | S | CRAFT | I4 |
-| I7 | Rollback: what makes it non-viable, and when you pass that point | M | CRAFT | I6 |
-| I8 | Decommissioning checklist | S | CRAFT | I7 |
-| I9 | What to keep from the old script: comments, history, intent | S | CRAFT | I8 |
-| I10 | Documenting the conversion decisions for the next person | S | CRAFT | I9 |
+| **I1** ✅ | [Conversion order: leaves first or roots first](I-migration/I1-conversion-order.md) | M | CRAFT | A2 |
+| **I2** ✅ | [The strangler pattern for a script suite](I-migration/I2-strangler-pattern.md) | M | CRAFT | I1 |
+| **I3** ✅ | [Converting one script while others still depend on its output](I-migration/I3-converting-with-dependents.md) | M | CRAFT | I2 |
+| **I4** ✅ | [Dual-write during cutover](I-migration/I4-dual-write.md) | M | CRAFT | H5 |
+| **I5** ✅ | [Telling downstream consumers](I-migration/I5-notifying-consumers.md) | S | CRAFT | I4 |
+| **I6** ✅ | [Rollback: keeping the old script runnable](I-migration/I6-rollback-keeping-script.md) | S | CRAFT | I4 |
+| **I7** ✅ | [Rollback: what makes it non-viable, and when you pass that point](I-migration/I7-rollback-non-viable.md) | M | CRAFT | I6 |
+| **I8** ✅ | [Decommissioning checklist](I-migration/I8-decommissioning.md) | S | CRAFT | I7 |
+| **I9** ✅ | [What to keep from the old script: comments, history, intent](I-migration/I9-what-to-keep.md) | S | CRAFT | I8 |
+| **I10** ✅ | [Documenting the conversion decisions for the next person](I-migration/I10-documenting-decisions.md) | S | CRAFT | I9 |
 
 ---
 
@@ -300,15 +300,15 @@ write.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| J1 | Cost after conversion: what actually changed, and how to see it | M | CRAFT | — |
-| J2 | Monitoring incremental drift in production | M | CRAFT | H5 |
-| J3 | Scheduled full-refresh reconciliation as a standing control | M | CRAFT | J2 |
-| J4 | Alerting: test failures vs run failures | M | CORE | H12 |
-| J5 | Ownership and on-call handover | S | CRAFT | I10 |
-| J6 | Freshness checks | S | CORE | — |
-| J7 | Schema evolution over time | M | SRC | D8 |
-| J8 | Growing partition counts and the 4,000 limit | S | CRAFT | D6 |
-| J9 | When to revisit the strategy choice | M | CRAFT | J1 |
+| **J1** ✅ | [Cost after conversion: what actually changed, and how to see it](J-operating/J1-cost-after-conversion.md) | M | CRAFT | — |
+| **J2** ✅ | [Monitoring incremental drift in production](J-operating/J2-monitoring-drift.md) | M | CRAFT | H5 |
+| **J3** ✅ | [Scheduled full-refresh reconciliation as a standing control](J-operating/J3-scheduled-reconciliation.md) | M | CRAFT | J2 |
+| **J4** ✅ | [Alerting: test failures vs run failures](J-operating/J4-alerting.md) | M | CORE | H12 |
+| **J5** ✅ | [Ownership and on-call handover](J-operating/J5-ownership-handover.md) | S | CRAFT | I10 |
+| **J6** ✅ | [Freshness checks](J-operating/J6-freshness-checks.md) | S | CORE | — |
+| **J7** ✅ | [Schema evolution over time](J-operating/J7-schema-evolution.md) | M | SRC | D8 |
+| **J8** ✅ | [Growing partition counts and the 4,000 limit](J-operating/J8-partition-growth.md) | S | CRAFT | D6 |
+| **J9** ✅ | [When to revisit the strategy choice](J-operating/J9-revisiting-strategy.md) | M | CRAFT | J1 |
 
 J3 is the single highest-value operational control in the whole track: a
 scheduled full-refresh into a scratch dataset, diffed against production, is the
@@ -320,18 +320,18 @@ only reliable detector for the silent failures the other tracks document.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| K1 | The mega-model: one model doing what five should | M | CRAFT | C3 |
-| K2 | Hooks as a general-purpose escape hatch | M | CRAFT | F17 |
-| K3 | Incremental applied where a table belongs | M | CRAFT | A7 |
-| K4 | `run-operation` used as a scheduler | S | CRAFT | C10 |
-| K5 | Rebuilding the script's imperative structure in Jinja | M | CRAFT | C6, C7 |
-| K6 | Porting the bug faithfully | M | CRAFT | A6 |
-| K7 | Over-parameterising with vars | S | CRAFT | G3 |
-| K8 | One model per script, mechanically | M | CRAFT | C3 |
-| K9 | Ephemeral overuse | S | CRAFT | C2 |
-| K10 | No tests, because the script had none | S | CRAFT | H12 |
-| K11 | Converting and optimising in the same change | M | CRAFT | H1 |
-| K12 | Trusting a green run | S | CRAFT | J2 |
+| **K1** ✅ | [The mega-model: one model doing what five should](K-antipatterns/K1-mega-model.md) | M | CRAFT | C3 |
+| **K2** ✅ | [Hooks as a general-purpose escape hatch](K-antipatterns/K2-hooks-as-escape-hatch.md) | M | CRAFT | F17 |
+| **K3** ✅ | [Incremental applied where a table belongs](K-antipatterns/K3-unnecessary-incremental.md) | M | CRAFT | A7 |
+| **K4** ✅ | [`run-operation` used as a scheduler](K-antipatterns/K4-run-operation-as-scheduler.md) | S | CRAFT | C10 |
+| **K5** ✅ | [Rebuilding the script's imperative structure in Jinja](K-antipatterns/K5-imperative-jinja.md) | M | CRAFT | C6, C7 |
+| **K6** ✅ | [Porting the bug faithfully](K-antipatterns/K6-porting-the-bug.md) | M | CRAFT | A6 |
+| **K7** ✅ | [Over-parameterising with vars](K-antipatterns/K7-over-parameterising.md) | S | CRAFT | G3 |
+| **K8** ✅ | [One model per script, mechanically](K-antipatterns/K8-one-model-per-statement.md) | M | CRAFT | C3 |
+| **K9** ✅ | [Ephemeral overuse](K-antipatterns/K9-ephemeral-overuse.md) | S | CRAFT | C2 |
+| **K10** ✅ | [No tests, because the script had none](K-antipatterns/K10-no-tests.md) | S | CRAFT | H12 |
+| **K11** ✅ | [Converting and optimising in the same change](K-antipatterns/K11-convert-and-optimise.md) | M | CRAFT | H1 |
+| **K12** ✅ | [Trusting a green run](K-antipatterns/K12-trusting-green-runs.md) | S | CRAFT | J2 |
 
 K6 deserves more than it sounds like. Scripts accumulate compensating hacks — a
 `DELETE` fixing yesterday's double-insert, a filter working around a duplicate
@@ -365,12 +365,9 @@ Makes the track usable and covers the two highest-risk conversions end to end.
 write-pattern archetypes, statement-level translation, hooks, and verification.
 That is the full path from "what have I got" to "the old script is retired".
 
-**Waves 1–4 are complete.** Seven of the eleven parts are finished. Everything
-about *translating a script* is now written — what you have, what shape it is,
-how each construct maps, hooks, and how to prove the result.
-
-Remaining is wave 5: Parts G, I, J and K — scheduling and backfills, migration
-strategy, operating it afterwards, and anti-patterns.
+**The track is complete.** All 138 units across eleven parts, covering the full
+arc: what you have, whether to convert it, how every construct maps, how to prove
+the result, how to cut over, how to operate it afterwards, and what not to do.
 
 Rationale: E1 is the constraint everything references. A3 routes readers. B8 and
 B13 are the two conversions people actually arrive with. **B14 carries the
@@ -405,9 +402,9 @@ Parts C, D and E are now complete.
 
 ### Wave 5 — Operations and migration (42 units)
 
-Part G (11) · Part I (10) · Part J (9) · Part K (12)
+Part G (11) · Part I (10) · Part J (9) · Part K (12) — **all written ✅**
 
-Waves sum to 138.
+Waves sum to 138. **All five waves are complete.**
 
 ### dbt-core is now pinned
 

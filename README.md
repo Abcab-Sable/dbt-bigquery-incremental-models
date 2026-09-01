@@ -27,16 +27,16 @@ differs.
 jump to [expert](docs/expert/README.md) if you're skimming for a detail you
 half-remember.
 
-### 🔧 Converting existing scripts into dbt — *in progress, 96 of 138*
+### 🔧 Converting existing scripts into dbt — *complete, 138 units*
 
 A fourth track, on turning scheduled queries, stored procedures and `bq`
 pipelines into dbt models: archetype-by-archetype translation, hooks in depth,
 backfills, and proving the conversion matches what it replaced.
 
 Decomposed into **138 units across eleven parts**, sequenced into
-[five delivery waves](docs/converting/BACKLOG.md#delivery-waves). **Waves 1–4 are complete** — seven of eleven parts. Everything about translating
-a script: assessment, every archetype, statement-level translation, structural
-conversions, data movement and DDL, hooks, and verification. Start at
+[five delivery waves](docs/converting/BACKLOG.md#delivery-waves). **All 138 units are written**, covering the full arc: what you have, whether to
+convert it, how every construct maps, how to prove the result, how to cut over,
+how to operate it afterwards, and what not to do. Start at
 [one statement per model](docs/converting/E-translation/E1-one-statement-per-model.md),
 or see [the track index](docs/converting/README.md).
 

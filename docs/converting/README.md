@@ -1,13 +1,10 @@
 # The conversion track
 
-**Status: waves 1–4 complete — 96 of 138 units written.**
+**Status: complete — all 138 units across eleven parts.**
 
-Seven of the eleven parts are finished. Everything about *translating a script*
-is now written: what you have, what shape it is, how each construct maps, hooks
-in full, and how to prove the result.
-
-Remaining is wave 5 — scheduling and backfills, migration strategy, operating it
-afterwards, and anti-patterns.
+The full arc: what you have, whether to convert it, how every construct maps,
+how to prove the result, how to cut over, how to operate it afterwards, and what
+not to do.
 
 ## Written so far
 
@@ -141,6 +138,68 @@ afterwards, and anti-patterns.
 | [H11](H-verification/H11-differences-that-should-exist.md) | Differences that should exist |
 | [H12](H-verification/H12-tests-from-guarantees.md) | Tests from the script's guarantees |
 | [H13](H-verification/H13-sign-off.md) | Sign-off and retiring the script |
+
+### Scheduling, parameters, backfills — *complete*
+
+| | |
+| --- | --- |
+| [G1](G-scheduling/G1-cron-to-dbt-build.md) | From cron to `dbt build` |
+| [G2](G-scheduling/G2-consolidating-schedules.md) | Consolidating schedules |
+| [G3](G-scheduling/G3-passing-dates.md) | Passing dates in |
+| [G4](G-scheduling/G4-env-vars-secrets.md) | Environment variables and secrets |
+| [G5](G-scheduling/G5-backfill-full-refresh.md) | Backfill via `--full-refresh` |
+| [G6](G-scheduling/G6-backfill-microbatch.md) | Backfill via microbatch |
+| [G7](G-scheduling/G7-backfill-partition-ranges.md) | Backfill via partition ranges |
+| [G8](G-scheduling/G8-late-arriving-data.md) | Late-arriving data |
+| [G9](G-scheduling/G9-selectors.md) | Selectors |
+| [G10](G-scheduling/G10-state-selection.md) | State-based selection and slim CI |
+| [G11](G-scheduling/G11-retry-and-failure.md) | Retry and partial-failure semantics |
+
+### Migration strategy — *complete*
+
+| | |
+| --- | --- |
+| [I1](I-migration/I1-conversion-order.md) | Conversion order |
+| [I2](I-migration/I2-strangler-pattern.md) | The strangler pattern |
+| [I3](I-migration/I3-converting-with-dependents.md) | Converting with dependents |
+| [I4](I-migration/I4-dual-write.md) | Dual-write during cutover |
+| [I5](I-migration/I5-notifying-consumers.md) | Telling downstream consumers |
+| [I6](I-migration/I6-rollback-keeping-script.md) | Rollback: keeping the script |
+| [I7](I-migration/I7-rollback-non-viable.md) | When rollback stops being viable |
+| [I8](I-migration/I8-decommissioning.md) | Decommissioning checklist |
+| [I9](I-migration/I9-what-to-keep.md) | What to keep from the old script |
+| [I10](I-migration/I10-documenting-decisions.md) | Documenting the decisions |
+
+### Operating it afterwards — *complete*
+
+| | |
+| --- | --- |
+| [J1](J-operating/J1-cost-after-conversion.md) | Cost after conversion |
+| [J2](J-operating/J2-monitoring-drift.md) | Monitoring incremental drift |
+| [J3](J-operating/J3-scheduled-reconciliation.md) | **Scheduled reconciliation** — the control that works |
+| [J4](J-operating/J4-alerting.md) | Alerting |
+| [J5](J-operating/J5-ownership-handover.md) | Ownership and handover |
+| [J6](J-operating/J6-freshness-checks.md) | Freshness checks |
+| [J7](J-operating/J7-schema-evolution.md) | Schema evolution |
+| [J8](J-operating/J8-partition-growth.md) | Partition-count growth |
+| [J9](J-operating/J9-revisiting-strategy.md) | Revisiting the strategy choice |
+
+### Anti-patterns — *complete*
+
+| | |
+| --- | --- |
+| [K1](K-antipatterns/K1-mega-model.md) | The mega-model |
+| [K2](K-antipatterns/K2-hooks-as-escape-hatch.md) | Hooks as an escape hatch |
+| [K3](K-antipatterns/K3-unnecessary-incremental.md) | Incremental where a table belongs |
+| [K4](K-antipatterns/K4-run-operation-as-scheduler.md) | `run-operation` as a scheduler |
+| [K5](K-antipatterns/K5-imperative-jinja.md) | Imperative structure in Jinja |
+| [K6](K-antipatterns/K6-porting-the-bug.md) | Porting the bug faithfully |
+| [K7](K-antipatterns/K7-over-parameterising.md) | Over-parameterising with vars |
+| [K8](K-antipatterns/K8-one-model-per-statement.md) | One model per statement |
+| [K9](K-antipatterns/K9-ephemeral-overuse.md) | Ephemeral overuse |
+| [K10](K-antipatterns/K10-no-tests.md) | No tests, because the script had none |
+| [K11](K-antipatterns/K11-convert-and-optimise.md) | Converting and optimising together |
+| [K12](K-antipatterns/K12-trusting-green-runs.md) | **Trusting a green run** |
 
 ## Where to start
 
