@@ -33,10 +33,10 @@ A fourth track, on turning scheduled queries, stored procedures and `bq`
 pipelines into dbt models: archetype-by-archetype translation, hooks in depth,
 backfills, and proving the conversion matches what it replaced.
 
-Scoped and decomposed into 62 units, none written yet.
+Scoped and decomposed into **138 units across eleven parts**, none written yet.
 See [the track index](docs/converting/README.md) and
-[the backlog](docs/converting/BACKLOG.md), including a
-[recommended first slice](docs/converting/BACKLOG.md#recommended-first-slice).
+[the backlog](docs/converting/BACKLOG.md), which sequences them into
+[five delivery waves](docs/converting/BACKLOG.md#delivery-waves).
 
 ## The findings, if you only read one thing
 

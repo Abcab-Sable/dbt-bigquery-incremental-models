@@ -56,21 +56,26 @@ So every unit in the backlog carries a tag:
 Mixing these silently would undermine the thing that makes this repo worth
 reading. Pages will say which they are.
 
-## The eight parts
+## The eleven parts
 
 | Part | Subject | Units |
 | --- | --- | --- |
-| **A** | [Assess before you convert](BACKLOG.md#part-a--assess-before-you-convert) | 5 |
-| **B** | [Script archetypes → dbt shapes](BACKLOG.md#part-b--script-archetypes--dbt-shapes) | 16 |
-| **C** | [Statement-level translation](BACKLOG.md#part-c--statement-level-translation) | 8 |
-| **D** | [Hooks](BACKLOG.md#part-d--hooks) | 10 |
-| **E** | [Scheduling, parameters, backfills](BACKLOG.md#part-e--scheduling-parameters-backfills) | 6 |
-| **F** | [Proving the conversion is correct](BACKLOG.md#part-f--proving-the-conversion-is-correct) | 6 |
-| **G** | [Migration strategy](BACKLOG.md#part-g--migration-strategy) | 5 |
-| **H** | [Anti-patterns](BACKLOG.md#part-h--anti-patterns) | 6 |
+| **A** | [Assess before you convert](BACKLOG.md#part-a--assess-before-you-convert) | 9 |
+| **B** | [Write-pattern archetypes](BACKLOG.md#part-b--write-pattern-archetypes) | 16 |
+| **C** | [Structural archetypes](BACKLOG.md#part-c--structural-archetypes) | 14 |
+| **D** | [Data movement, DDL, metadata](BACKLOG.md#part-d--data-movement-ddl-and-metadata) | 14 |
+| **E** | [Statement-level translation](BACKLOG.md#part-e--statement-level-translation) | 13 |
+| **F** | [Hooks](BACKLOG.md#part-f--hooks) | 17 |
+| **G** | [Scheduling, parameters, backfills](BACKLOG.md#part-g--scheduling-parameters-backfills) | 11 |
+| **H** | [Proving correctness](BACKLOG.md#part-h--proving-correctness) | 13 |
+| **I** | [Migration strategy](BACKLOG.md#part-i--migration-strategy) | 10 |
+| **J** | [Operating it afterwards](BACKLOG.md#part-j--operating-it-afterwards) | 9 |
+| **K** | [Anti-patterns](BACKLOG.md#part-k--anti-patterns) | 12 |
 
-**62 units total.** Full breakdown, with sizes and dependencies, in
-[the backlog](BACKLOG.md).
+**138 units total**, none larger than a single page — if a unit would need a long
+page, it is already split. Full breakdown with sizes, sourcing and dependencies
+in [the backlog](BACKLOG.md), which also sets out
+[five delivery waves](BACKLOG.md#delivery-waves).
 
 ## Three findings already banked
 
@@ -90,8 +95,16 @@ than folklore:
 
 ## Where to start
 
-The backlog proposes a [first slice](BACKLOG.md#recommended-first-slice) of eight
-units that makes the track useful on its own before the other 54 exist.
+The backlog opens with a [ten-unit first wave](BACKLOG.md#wave-1--foundation-10-units)
+that leaves the track coherent and useful before the other 128 exist. It covers
+the two conversions people actually arrive with — a hand-written `MERGE` and a
+`DELETE`+`INSERT` — end to end, with the reasoning and the verification either
+side of them.
+
+**One decision blocks early work.** Seventeen units depend on dbt-core, which has
+not been read. Two of them land in Wave 2, so this needs deciding before then:
+pin dbt-core the way dbt-adapters is pinned, or write those units with their
+uncertainty stated inline.
 
 ---
 
