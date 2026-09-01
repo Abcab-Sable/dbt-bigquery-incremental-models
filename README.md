@@ -27,6 +27,17 @@ differs.
 jump to [expert](docs/expert/README.md) if you're skimming for a detail you
 half-remember.
 
+### 🔧 Converting existing scripts into dbt — *planned*
+
+A fourth track, on turning scheduled queries, stored procedures and `bq`
+pipelines into dbt models: archetype-by-archetype translation, hooks in depth,
+backfills, and proving the conversion matches what it replaced.
+
+Scoped and decomposed into 62 units, none written yet.
+See [the track index](docs/converting/README.md) and
+[the backlog](docs/converting/BACKLOG.md), including a
+[recommended first slice](docs/converting/BACKLOG.md#recommended-first-slice).
+
 ## The findings, if you only read one thing
 
 - **Dynamic `insert_overwrite` never empties a partition.** The replacement set is
