@@ -20,7 +20,8 @@ granularity rule, not an accident.
 | `CORE✓` | dbt-core behaviour **already verified** in source. Ready to write. |
 | `CRAFT` | Judgment and practice. Will be written as advice and labelled as such. |
 
-**Status** — all `todo`. Column kept so it stays useful as we work.
+**Status** — ✅ means written and linked. Everything else is `todo`.
+**5 of 138 done** (wave 1, units 1–5).
 
 **Deps** — units that should be written first, because this one links to them.
 
@@ -44,11 +45,11 @@ converting the right thing without knowing what "correct" meant.
 | --- | --- | --- | --- | --- |
 | A1 | Inventory: enumerate every script, its schedule, and its owner | S | CRAFT | — |
 | A2 | Map declared dependencies against actual ones | M | CRAFT | A1 |
-| A3 | Classify by write pattern: replace / append / upsert / delete-insert / DDL / side-effect | M | CRAFT | — |
+| **A3** ✅ | [Classify by write pattern: replace / append / upsert / delete-insert / DDL / side-effect](A-assess/A3-classify-by-write-pattern.md) | M | CRAFT | — |
 | A4 | Classify by trigger: cron, event-driven, manual, chained | S | CRAFT | A1 |
 | A5 | Find the hidden state: manual steps, assumed-existing objects | M | CRAFT | — |
 | A6 | Find compensating hacks — the fixes that encode an upstream bug | M | CRAFT | A5 |
-| A7 | Decide what **not** to convert | S | CRAFT | A3 |
+| **A7** ✅ | [Decide what **not** to convert](A-assess/A7-what-not-to-convert.md) | S | CRAFT | A3 |
 | A8 | Estimate conversion risk per script | S | CRAFT | A3, A5 |
 | A9 | Capture the correctness baseline before touching anything | M | CRAFT | — |
 
@@ -72,12 +73,12 @@ before/after, and what breaks in translation.
 | B5 | Unfiltered `INSERT INTO ... SELECT` → incremental, append semantics | M | SRC | E1 |
 | B6 | `INSERT` with a watermark filter → incremental + `is_incremental()` | M | SRC | B5 |
 | B7 | Watermark held in a separate state table → replacing it with `{{ this }}` | M | CRAFT | B6 |
-| B8 | Hand-written `MERGE`: the `ON` clause → `unique_key` | M | SRC | — |
+| **B8** ✅ | [Hand-written `MERGE`: the `ON` clause → `unique_key`](B-write-patterns/B8-merge-on-clause-to-unique-key.md) | M | SRC | — |
 | B9 | Hand-written `MERGE`: `WHEN MATCHED THEN UPDATE` → `merge_update_columns` / `merge_exclude_columns` | M | SRC | B8 |
 | B10 | Hand-written `MERGE`: `WHEN NOT MATCHED BY SOURCE THEN DELETE` → the case dbt's `merge` cannot express | M | SRC | B8 |
 | B11 | Hand-written `MERGE`: conditional `WHEN MATCHED AND ...` clauses | M | SRC | B9 |
 | B12 | Hand-written `MERGE`: extra `ON` predicates → `incremental_predicates` | M | SRC | B8 |
-| B13 | `DELETE` + `INSERT` over a date range → `insert_overwrite` | M | SRC | — |
+| **B13** ✅ | [`DELETE` + `INSERT` over a date range → `insert_overwrite`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) | M | SRC | — |
 | B14 | `DELETE` + `INSERT` where the range can legitimately empty → **the behaviour change** | M | SRC | B13 |
 | B15 | `TRUNCATE` + `INSERT` → `table`, or `insert_overwrite` when partitioned | S | SRC | B13 |
 | B16 | Deduplication scripts (`QUALIFY ROW_NUMBER()`) → where dedup belongs after conversion | M | CRAFT | B8 |
@@ -154,7 +155,7 @@ can link instead of repeating.
 
 | ID | Unit | Size | Sourcing | Deps |
 | --- | --- | --- | --- | --- |
-| E1 | **One statement per model** — the constraint everything follows from | S | SRC | — |
+| **E1** ✅ | [**One statement per model** — the constraint everything follows from](E-translation/E1-one-statement-per-model.md) | S | SRC | — |
 | E2 | Ordering by `ref()` instead of by line number | M | CORE | E1 |
 | E3 | `ref` vs `source`, and never both for the same object | S | CORE | E2 |
 | E4 | Cross-project and cross-dataset references | S | CRAFT | E3 |
@@ -349,7 +350,15 @@ and useful on its own.
 
 Makes the track usable and covers the two highest-risk conversions end to end.
 
-`E1` · `A3` · `A7` · `B8` · `B13` · `B14` · `F17` · `F4` · `H2` · `A9`
+[`E1`](E-translation/E1-one-statement-per-model.md) ✅ ·
+[`A3`](A-assess/A3-classify-by-write-pattern.md) ✅ ·
+[`A7`](A-assess/A7-what-not-to-convert.md) ✅ ·
+[`B8`](B-write-patterns/B8-merge-on-clause-to-unique-key.md) ✅ ·
+[`B13`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md) ✅ ·
+`B14` · `F17` · `F4` · `H2` · `A9`
+
+**Five written. `B14` is next**, and `B13` explicitly defers to it — until it
+exists, the most important warning in the track is a forward reference.
 
 Rationale: E1 is the constraint everything references. A3 routes readers. B8 and
 B13 are the two conversions people actually arrive with. **B14 carries the

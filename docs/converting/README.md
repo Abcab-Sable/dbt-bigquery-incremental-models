@@ -1,6 +1,21 @@
 # The conversion track
 
-**Status: planned. This page is the map, not the material.**
+**Status: in progress — 5 of 138 units written.**
+
+## Written so far
+
+Read in this order; they're sequenced, not alphabetical.
+
+1. [E1 · One statement per model](E-translation/E1-one-statement-per-model.md) — the constraint everything else follows from
+2. [A3 · Classify by write pattern](A-assess/A3-classify-by-write-pattern.md) — work out which conversion applies
+3. [A7 · Decide what not to convert](A-assess/A7-what-not-to-convert.md) — the counterweight
+4. [B8 · The `MERGE` `ON` clause → `unique_key`](B-write-patterns/B8-merge-on-clause-to-unique-key.md)
+5. [B13 · `DELETE` + `INSERT` → `insert_overwrite`](B-write-patterns/B13-delete-insert-to-insert-overwrite.md)
+
+Next: **B14**, on the case where the naive version of conversion 5 is silently
+wrong. B13 defers to it, so it's the highest-priority gap.
+
+The rest of the map follows.
 
 Turning existing scripts — scheduled queries, stored procedures, `bq` shell
 pipelines, Python jobs — into dbt models. The existing three tracks describe how
