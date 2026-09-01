@@ -43,7 +43,19 @@ important conversion in this track. Look hard at the `DELETE`'s `WHERE`:
 - Bounded by keys matching the insert ⇒ that's an upsert written longhand.
   Convert as [B8](../B-write-patterns/B8-merge-on-clause-to-unique-key.md), not
   as delete-insert.
+- On a non-partition column, but the affected rows sit inside a partition range
+  you can compute ⇒ `insert_overwrite` over that superset — and the model must
+  then emit every surviving row in those partitions, not just the changed ones.
+- On an attribute with no partition relationship (`WHERE status = 'cancelled'`),
+  or driven by another table (`WHERE id IN (SELECT ...)`) ⇒ no strategy expresses
+  it. Rebuild as `table`, anti-join in the model body, or soft-delete —
+  [B10](../B-write-patterns/B10-not-matched-by-source.md).
+- Wider than the `INSERT` reloads ⇒ two concerns tangled, a reload *and* a
+  retention purge. Split them.
 - Unbounded (`DELETE FROM t` with no `WHERE`) ⇒ that's a replace. Use `table`.
+
+The full classifier, with the conversion for each shape, is in the
+[cheatsheet](../CHEATSHEET.md#4-delete-when-the-predicate-isnt-a-partition-range).
 
 **`CREATE OR REPLACE` on a table nothing else writes to** — replace. Genuinely
 just `materialized='table'`. Don't make it incremental because it's big; see
