@@ -42,8 +42,8 @@ teach you something painful, learn it on something nobody's watching.
 the process is proven — usually second wave.
 
 **High risk, high difficulty** ⇒ last, and deliberately. These need shadow
-running ([H5](../BACKLOG.md#part-h--proving-correctness)), a rollback plan
-([I6](../BACKLOG.md#part-i--migration-strategy)), and a named owner. Some should
+running ([H5](../H-verification/H5-shadow-mode.md)), a rollback plan
+([I6](../I-migration/I6-rollback-keeping-script.md)), and a named owner. Some should
 be redesigned rather than converted.
 
 ## The specific risk multipliers
@@ -58,7 +58,7 @@ Score these separately, because each one has bitten a real migration:
 | **Nullable columns in the intended `unique_key`** | Duplicates on every run |
 | **Procedural control flow** | May not be convertible at all |
 | **Target isn't partitioned but needs to be** | A table migration, not just a conversion |
-| **Feeds something you don't control** | Cutover needs coordination — [I5](../BACKLOG.md#part-i--migration-strategy) |
+| **Feeds something you don't control** | Cutover needs coordination — [I5](../I-migration/I5-notifying-consumers.md) |
 
 Any two of these together and it belongs in the high-difficulty quadrant
 regardless of how simple the SQL looks.
@@ -71,7 +71,7 @@ few scripts would have.
 
 The output you want is a list in the order you'll work through it, with the
 scary ones explicitly deferred and the reason recorded. That order feeds
-[I1](../BACKLOG.md#part-i--migration-strategy).
+[I1](../I-migration/I1-conversion-order.md).
 
 ---
 

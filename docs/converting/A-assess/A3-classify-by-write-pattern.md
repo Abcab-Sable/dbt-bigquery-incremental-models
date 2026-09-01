@@ -73,7 +73,7 @@ Yes ⇒ `insert_overwrite`, and you already know the partition column. No ⇒
 **3. Can a period legitimately produce zero rows?**
 This is the question nobody asks, and it decides whether the naive conversion is
 *correct*. If yes, dynamic `insert_overwrite` will silently leave stale data
-behind — that's [B14](../BACKLOG.md#part-b--write-pattern-archetypes) and it is
+behind — that's [B14](../B-write-patterns/B14-when-the-range-can-empty.md) and it is
 the reason this track exists.
 
 ## Record the answer

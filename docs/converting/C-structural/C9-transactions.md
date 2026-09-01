@@ -72,7 +72,7 @@ individually, and a failure can leave one built and two not.
 There is no dbt mechanism for this. If it matters, the options are: combine into
 one model where possible, or handle partial success in your orchestrator. Record
 the decision — [C4](C4-fan-out.md) and
-[G11](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+[G11](../G-scheduling/G11-retry-and-failure.md).
 
 **Hooks with the model.** A post-hook is a separate statement; a failure after the
 model builds leaves the model built and the hook unapplied, with no rollback —

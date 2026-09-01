@@ -90,7 +90,7 @@ broader applies from `dbt_project.yml`.
 
 Authorized views, row-level access policies, and policy tags aren't covered by
 the `grants` config. Those may need a hook or an out-of-band process —
-[D11](../BACKLOG.md#part-d--data-movement-ddl-and-metadata).
+[D11](../D-data-movement/D11-policy-tags-rls.md).
 
 If you do need one, be aware it runs before `apply_grants`, and make sure the two
 aren't operating on the same principal-and-role pair. Different concerns, no

@@ -39,8 +39,8 @@ That's every property dbt exists to provide, given up to avoid creating a file.
 Hooks are right for things that are genuinely *about* the relation but not *part
 of* it:
 
-- **Table metadata** — labels, description, expiration ([D7](../BACKLOG.md#part-d--data-movement-ddl-and-metadata))
-- **Audit rows** — recording that this model ran, with row counts ([F13](../BACKLOG.md#part-f--hooks))
+- **Table metadata** — labels, description, expiration ([D7](../D-data-movement/D7-table-options.md))
+- **Audit rows** — recording that this model ran, with row counts ([F13](../F-hooks/F13-post-hook-audit-rows.md))
 - **Session settings** a specific model needs
 - **Environment-conditional operations** that render empty elsewhere
 
@@ -51,13 +51,13 @@ Short, idempotent, and about *this* relation. That's the shape.
 | Your script's leftover | Not a hook | Because |
 | --- | --- | --- |
 | Builds an intermediate table | **A model** | It's a table. Give it a name and lineage. |
-| Writes a second output table | **A model** | Two outputs, two models ([C4](../BACKLOG.md#part-c--structural-archetypes)) |
+| Writes a second output table | **A model** | Two outputs, two models ([C4](../C-structural/C4-fan-out.md)) |
 | `DELETE`s old rows for retention | **A model, or a scheduled operation** | It's a policy, not part of the definition |
-| Checks a condition and fails | **A dbt test** | That's precisely what tests are ([D12](../BACKLOG.md#part-d--data-movement-ddl-and-metadata)) |
-| Exports to GCS | **Orchestration** | Not a transformation ([D2](../BACKLOG.md#part-d--data-movement-ddl-and-metadata)) |
+| Checks a condition and fails | **A dbt test** | That's precisely what tests are ([D12](../D-data-movement/D12-assert-gates.md)) |
+| Exports to GCS | **Orchestration** | Not a transformation ([D2](../D-data-movement/D2-export-data.md)) |
 | Sends a notification | **Orchestration** | Your scheduler already does this |
-| Grants access | **The `grants` config** | A hook races `apply_grants` — [F11](../BACKLOG.md#part-f--hooks) |
-| Creates a UDF | **A macro or managed DDL** | ([C11](../BACKLOG.md#part-c--structural-archetypes)) |
+| Grants access | **The `grants` config** | A hook races `apply_grants` — [F11](../F-hooks/F11-grants-vs-post-hook.md) |
+| Creates a UDF | **A macro or managed DDL** | ([C11](../C-structural/C11-temp-functions.md)) |
 | One-off maintenance | **`run-operation`** | Not per-model work |
 
 ## Four reasons hooks are worse than they look
@@ -113,7 +113,7 @@ months nobody will know which.
 
 Conversions that go wrong nearly always go wrong here — not by picking the wrong
 strategy, but by moving the script's imperative tail into hooks and calling the
-job done. That's [K2](../BACKLOG.md#part-k--anti-patterns), and it's the most
+job done. That's [K2](../K-antipatterns/K2-hooks-as-escape-hatch.md), and it's the most
 common bad outcome in the whole track.
 
 ---

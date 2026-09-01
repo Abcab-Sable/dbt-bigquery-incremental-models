@@ -8,10 +8,10 @@ strategy generates the same statement. You're not changing behaviour — you're
 deleting the parts dbt writes for you and keeping the parts it can't know.
 
 This page covers the `ON` clause. The other clauses have their own units:
-[B9](../BACKLOG.md#part-b--write-pattern-archetypes) for `WHEN MATCHED`,
-[B10](../BACKLOG.md#part-b--write-pattern-archetypes) for
-`WHEN NOT MATCHED BY SOURCE`, [B11](../BACKLOG.md#part-b--write-pattern-archetypes)
-for conditional clauses, [B12](../BACKLOG.md#part-b--write-pattern-archetypes) for
+[B9](../B-write-patterns/B9-when-matched-update.md) for `WHEN MATCHED`,
+[B10](../B-write-patterns/B10-not-matched-by-source.md) for
+`WHEN NOT MATCHED BY SOURCE`, [B11](../B-write-patterns/B11-conditional-when-matched.md)
+for conditional clauses, [B12](../B-write-patterns/B12-extra-predicates.md) for
 extra predicates.
 
 ## The starting point
@@ -44,7 +44,7 @@ VALUES
 | `MERGE INTO analytics.orders` | the model's name and location |
 | the `USING (...)` subquery | **the model body** — this is your `select` |
 | `ON T.order_id = S.order_id` | `unique_key='order_id'` |
-| `WHEN MATCHED THEN UPDATE SET ...` | generated — every column, unless you narrow it ([B9](../BACKLOG.md#part-b--write-pattern-archetypes)) |
+| `WHEN MATCHED THEN UPDATE SET ...` | generated — every column, unless you narrow it ([B9](../B-write-patterns/B9-when-matched-update.md)) |
 | `WHEN NOT MATCHED THEN INSERT ...` | generated |
 | the `WHERE updated_at > (SELECT MAX...)` | `is_incremental()` block |
 
@@ -82,7 +82,7 @@ The `ON` clause is doing two jobs, and only one of them is `unique_key`.
 
 **Everything else** — range bounds, tenant filters, soft-delete guards. These are
 *not* key equality and must not go in `unique_key`. They become
-`incremental_predicates` ([B12](../BACKLOG.md#part-b--write-pattern-archetypes)).
+`incremental_predicates` ([B12](../B-write-patterns/B12-extra-predicates.md)).
 
 Splitting a real one:
 
@@ -151,9 +151,9 @@ original `MERGE`. You're checking three things:
 2. The `USING` subquery matches your original, filter included.
 3. The update column list is what you expect — dbt updates **every** column by
    default, which may be wider than your original `SET`. If so, that's
-   [B9](../BACKLOG.md#part-b--write-pattern-archetypes).
+   [B9](../B-write-patterns/B9-when-matched-update.md).
 
-Then check row-level parity with [H2](../BACKLOG.md#part-h--proving-correctness)
+Then check row-level parity with [H2](../H-verification/H2-row-count-parity.md)
 before retiring the script.
 
 ## The clause dbt can't express
@@ -161,7 +161,7 @@ before retiring the script.
 If your `MERGE` has `WHEN NOT MATCHED BY SOURCE THEN DELETE`, stop here. dbt's
 `merge` strategy emits no such clause, and there is no config that adds one. That
 script is asking for `insert_overwrite` semantics or a redesign — see
-[B10](../BACKLOG.md#part-b--write-pattern-archetypes).
+[B10](../B-write-patterns/B10-not-matched-by-source.md).
 
 ---
 

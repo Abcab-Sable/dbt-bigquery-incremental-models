@@ -79,7 +79,7 @@ is not.
 | --- | --- |
 | `INSERT`/`MERGE` into another table | A model — [F17](F17-when-a-hook-is-wrong.md) |
 | `GRANT` | The `grants` config — [F11](F11-grants-vs-post-hook.md) |
-| `EXPORT DATA` to GCS | Orchestration — [D2](../BACKLOG.md#part-d--data-movement-ddl-and-metadata) |
+| `EXPORT DATA` to GCS | Orchestration — [D2](../D-data-movement/D2-export-data.md) |
 | Send a notification | Your scheduler |
 | Delete old rows for retention | A separate scheduled operation |
 | Refresh a downstream table | `ref()` and let the DAG do it |

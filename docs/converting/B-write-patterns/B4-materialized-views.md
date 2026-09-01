@@ -55,7 +55,7 @@ script's MV exists, the query already satisfies them — but any change you make
 during conversion might not.
 
 **Convert the query verbatim first.** Tidying it and converting it in the same
-change is [K11](../BACKLOG.md#part-k--anti-patterns), and here it can turn a
+change is [K11](../K-antipatterns/K11-convert-and-optimise.md), and here it can turn a
 working MV into a compile error for non-obvious reasons.
 
 ## When the script is doing BigQuery's job

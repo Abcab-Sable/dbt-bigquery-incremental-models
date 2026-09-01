@@ -112,12 +112,12 @@ purpose-built job.
 
 **Don't rebuild the loop in Jinja with `run_query`.** You get compile-time
 warehouse round-trips, a model nobody can debug, and iteration that isn't
-visible in the DAG. That's [K5](../BACKLOG.md#part-k--anti-patterns) — imperative
+visible in the DAG. That's [K5](../K-antipatterns/K5-imperative-jinja.md) — imperative
 structure rebuilt in templating, and it's worse than the procedure was.
 
 **Don't use `run-operation` as a loop host** and call it converted. A
 `run-operation` that loops is your script with extra steps and less visibility —
-[K4](../BACKLOG.md#part-k--anti-patterns).
+[K4](../K-antipatterns/K4-run-operation-as-scheduler.md).
 
 ## Flag it early
 

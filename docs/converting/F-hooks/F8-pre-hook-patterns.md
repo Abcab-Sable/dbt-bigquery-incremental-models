@@ -32,7 +32,7 @@ models where the input size can change unexpectedly.
 ```
 
 Works because the function and the model share a session. A persistent UDF
-managed elsewhere is usually better — [C11](../BACKLOG.md#part-c--structural-archetypes) —
+managed elsewhere is usually better — [C11](../C-structural/C11-temp-functions.md) —
 but this is a legitimate stopgap.
 
 **Environment-gated setup**, rendering empty elsewhere via

@@ -119,7 +119,7 @@ dbt run-operation drop_old_partitions --args '{dataset: analytics, days: 90}'
 ```
 
 Legitimate, and the right home for maintenance work. **Not** a scheduler and not
-a substitute for models — [K4](../BACKLOG.md#part-k--anti-patterns).
+a substitute for models — [K4](../K-antipatterns/K4-run-operation-as-scheduler.md).
 
 ## Ask first: does it need to be dynamic?
 

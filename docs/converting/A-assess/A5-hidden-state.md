@@ -78,11 +78,11 @@ where object_name = 'daily_events';
 
 | Found | Do |
 | --- | --- |
-| Table DDL differs from your config | Bring it into config, deliberately — [D6](../BACKLOG.md#part-d--data-movement-ddl-and-metadata) |
+| Table DDL differs from your config | Bring it into config, deliberately — [D6](../D-data-movement/D6-partitioning-ddl.md) |
 | Columns nobody writes | Decide: model them, or accept losing them |
 | A second writer | Resolve before converting. Two producers, one table is a bug either way |
 | A manual lookup | Becomes a seed, or a source. Don't leave it manual |
-| Hand-granted access | Into the `grants` config — [D10](../BACKLOG.md#part-d--data-movement-ddl-and-metadata) |
+| Hand-granted access | Into the `grants` config — [D10](../D-data-movement/D10-grants-authorized-views.md) |
 | Known-bad historical data | Record it in [A9](A9-correctness-baseline.md) so it doesn't look like a conversion bug |
 
 ## The question that finds most of it

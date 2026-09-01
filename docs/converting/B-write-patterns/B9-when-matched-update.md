@@ -115,7 +115,7 @@ for column. Then test the specific behaviour:
 
 A count-based parity check ([H2](../H-verification/H2-row-count-parity.md)) will
 **not** catch this — the row count is identical either way. It needs a column-level
-comparison, which is [H4](../BACKLOG.md#part-h--proving-correctness).
+comparison, which is [H4](../H-verification/H4-column-level-diffing.md).
 
 ---
 

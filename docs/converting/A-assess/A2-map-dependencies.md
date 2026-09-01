@@ -76,7 +76,7 @@ daily_events.sql
 ```
 
 The `gap` line is what changes your conversion order in
-[I1](../BACKLOG.md#part-i--migration-strategy). The self-read is normal — that's
+[I1](../I-migration/I1-conversion-order.md). The self-read is normal — that's
 the watermark pattern, and it becomes `{{ this }}`.
 
 ---

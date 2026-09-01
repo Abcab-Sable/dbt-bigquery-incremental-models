@@ -87,7 +87,7 @@ A policy tag is attached to a column by name. Renaming a column during conversio
 — even to something clearer — drops the tag with it.
 
 Another reason to keep the script's column names through the conversion and tidy
-separately ([K11](../BACKLOG.md#part-k--anti-patterns)). Here the cost of
+separately ([K11](../K-antipatterns/K11-convert-and-optimise.md)). Here the cost of
 renaming isn't a confusing diff; it's an unprotected PII column.
 
 ## Verify with a real principal

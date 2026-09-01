@@ -89,7 +89,7 @@ before cutover, not after:
 
 Record the name and date. During cutover, "this was signed off" is the difference
 between a planned change and an incident —
-[I5](../BACKLOG.md#part-i--migration-strategy).
+[I5](../I-migration/I5-notifying-consumers.md).
 
 ## When you can't explain one
 

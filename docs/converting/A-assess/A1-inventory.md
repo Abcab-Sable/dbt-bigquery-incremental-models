@@ -14,7 +14,7 @@ One row per script. Anything more and you won't finish it.
 | --- | --- |
 | Path / identifier | The thing itself |
 | Where it runs | Scheduled query, Composer, cron box, someone's laptop |
-| Schedule | Feeds [A4](A4-classify-by-trigger.md) and [G1](../BACKLOG.md#part-g--scheduling-parameters-backfills) |
+| Schedule | Feeds [A4](A4-classify-by-trigger.md) and [G1](../G-scheduling/G1-cron-to-dbt-build.md) |
 | Target table(s) | The output that matters |
 | Owner | The person who can say what "correct" means |
 | Last modified | A proxy for whether anyone still understands it |

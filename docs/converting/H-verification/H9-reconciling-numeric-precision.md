@@ -55,7 +55,7 @@ results are deterministic, and exact comparison is meaningful.
 If the values are money, they should be `NUMERIC`. If your script used `FLOAT64`
 for currency, that's a pre-existing bug — note it in
 [A6](../A-assess/A6-compensating-hacks.md), and fix it as a separate change, not
-during conversion ([K11](../BACKLOG.md#part-k--anti-patterns)).
+during conversion ([K11](../K-antipatterns/K11-convert-and-optimise.md)).
 
 Watch for the type changing during conversion. A `CREATE TABLE` declaring
 `NUMERIC(10,2)` becomes whatever your `select` infers unless you cast —

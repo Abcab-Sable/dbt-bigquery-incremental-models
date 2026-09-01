@@ -109,7 +109,7 @@ you a spine and some care with joins.
 **3. Reconcile on a schedule.** A periodic `--full-refresh` into a scratch
 dataset, diffed against production, catches drift from this and every other
 silent failure. Not a fix — a detector. Worth having regardless; it's
-[J3](../BACKLOG.md#part-j--operating-it-afterwards).
+[J3](../J-operating/J3-scheduled-reconciliation.md).
 
 Fix 1 unless you have a specific reason. Fixes 2 and 3 complement it.
 

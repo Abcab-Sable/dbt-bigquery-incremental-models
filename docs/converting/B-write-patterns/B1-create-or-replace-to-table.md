@@ -59,10 +59,10 @@ select ddl from `project.analytics.INFORMATION_SCHEMA.TABLES`
 where table_name = 'customer_summary';
 ```
 
-**Table options.** Expiration, labels, description — [D7](../BACKLOG.md#part-d--data-movement-ddl-and-metadata).
+**Table options.** Expiration, labels, description — [D7](../D-data-movement/D7-table-options.md).
 
 **Grants.** Into the `grants` config, not a hook —
-[D10](../BACKLOG.md#part-d--data-movement-ddl-and-metadata).
+[D10](../D-data-movement/D10-grants-authorized-views.md).
 
 ## The one behavioural difference
 

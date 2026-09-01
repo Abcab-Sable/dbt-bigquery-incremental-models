@@ -112,7 +112,7 @@ already built whatever succeeded; `on-run-end` can record that, not undo it.
 `on-run-end` firing a notification is reasonable. `on-run-end` kicking off the
 next pipeline stage is your scheduler's job, and putting it here hides a
 dependency from everyone who reads the project —
-[K4](../BACKLOG.md#part-k--anti-patterns).
+[K4](../K-antipatterns/K4-run-operation-as-scheduler.md).
 
 ---
 

@@ -31,7 +31,7 @@ Three queries in sequence, plus a notification.
 | The sequence | The DAG — [E2](../E-translation/E2-ordering-by-ref.md) |
 | `set -e` / failure propagation | dbt's own behaviour |
 | The Slack notification | **Stays** in the orchestrator |
-| The schedule | **Stays** — [G1](../BACKLOG.md#part-g--scheduling-parameters-backfills) |
+| The schedule | **Stays** — [G1](../G-scheduling/G1-cron-to-dbt-build.md) |
 
 The shell script becomes:
 
@@ -78,7 +78,7 @@ Don't try to move these into dbt:
 
 dbt is a transformation tool. It has no trigger model and no notion of external
 systems, and simulating either inside it is
-[K4](../BACKLOG.md#part-k--anti-patterns).
+[K4](../K-antipatterns/K4-run-operation-as-scheduler.md).
 
 ## Granularity: one task or several?
 
@@ -103,7 +103,7 @@ failed model's descendants and builds everything else.
 That's usually better, but it's a change. After a partial failure you have a
 partially-updated warehouse rather than a cleanly-stopped one. Know it before it
 happens at 3am, and decide whether downstream consumers can tolerate it —
-[G11](../BACKLOG.md#part-g--scheduling-parameters-backfills).
+[G11](../G-scheduling/G11-retry-and-failure.md).
 
 If you need all-or-nothing, that's `--fail-fast`, and it's a deliberate choice.
 

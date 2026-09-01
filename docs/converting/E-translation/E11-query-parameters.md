@@ -116,7 +116,7 @@ For a genuine backfill loop, this beats shelling out with vars in a bash `for`.
 
 The opposite failure: every literal becomes a var "for flexibility", and you get a
 model nobody can read with defaults nobody can find. That's
-[K7](../BACKLOG.md#part-k--anti-patterns).
+[K7](../K-antipatterns/K7-over-parameterising.md).
 
 Parameterise what someone actually overrides. Everything else is a constant, and
 constants are clearer inline — [E6](E6-hardcoded-dates.md).

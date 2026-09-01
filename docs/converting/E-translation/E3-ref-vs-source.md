@@ -59,7 +59,7 @@ sources:
           warn_after: {count: 26, period: hour}
 ```
 
-This is the strangler pattern's foothold ([I2](../BACKLOG.md#part-i--migration-strategy))
+This is the strangler pattern's foothold ([I2](../I-migration/I2-strangler-pattern.md))
 and the middle ground from [A7](../A-assess/A7-what-not-to-convert.md). Highest
 value per unit of risk in the whole migration.
 

@@ -133,7 +133,7 @@ having count(*) > 1
 ```
 
 Make it a `unique` test on the key so it stays true rather than being true once —
-[H12](../BACKLOG.md#part-h--proving-correctness).
+[H12](../H-verification/H12-tests-from-guarantees.md).
 
 ---
 

@@ -4,7 +4,7 @@
 > **The question:** what do I record before I touch anything?
 
 Once the script stops running, you can't ask it what it used to do. Everything in
-[Part H](../BACKLOG.md#part-h--proving-correctness) compares the new thing against
+[Part H](../README.md#scheduling-parameters-backfills--complete) compares the new thing against
 the old thing — so the old thing has to be written down first.
 
 This is fifteen minutes of work that is impossible to do retroactively.
@@ -50,7 +50,7 @@ That second table is what [H2](../H-verification/H2-row-count-parity.md) joins
 against. Having it precomputed makes parity checking a single query for the rest
 of the conversion.
 
-Also capture the schema, so [D8](../BACKLOG.md#part-d--data-movement-ddl-and-metadata)
+Also capture the schema, so [D8](../D-data-movement/D8-add-column-migrations.md)
 has something to compare against:
 
 ```sql
@@ -115,7 +115,7 @@ Ask whoever owns it:
 That last one saves real time. Converting a script whose output is already wrong
 for three days in 2024 produces a diff you'll spend a day chasing. Knowing about
 it upfront turns a bug hunt into a footnote — and connects to
-[A6](../BACKLOG.md#part-a--assess-before-you-convert), where compensating hacks
+[A6](../A-assess/A6-compensating-hacks.md), where compensating hacks
 get found.
 
 ## Where to put it
@@ -131,7 +131,7 @@ range, the empty-period answer, the re-run answer, cost figures, and the
 edge-case notes.
 
 Commit it. It's the evidence for the sign-off in
-[H13](../BACKLOG.md#part-h--proving-correctness), and the thing that tells the
+[H13](../H-verification/H13-sign-off.md), and the thing that tells the
 next person why the model is shaped the way it is.
 
 ## The trap
