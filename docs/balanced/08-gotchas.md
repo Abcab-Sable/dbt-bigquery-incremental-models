@@ -136,4 +136,4 @@ columns where `can_expand_to` is true. → [What counts as a change](07-schema-c
 ---
 
 Previous: [7. Schema changes](07-schema-changes.md) ·
-Back to [README](../README.md)
+Back to [README](../../README.md)
